@@ -1,0 +1,30 @@
+html, body {
+    height: 100%;
+}
+
+html {
+    display: table;
+    margin: auto;
+}
+
+body {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+table{
+    margin-left: auto;
+    margin-right: auto;
+}
+
+tr:nth-of-type(odd){
+    background-color: lightgray;
+}
+
+.p{
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.text{
+    font-family: monospace;
+}
