@@ -11,12 +11,12 @@ def convert(file_input, file_output):
     """
     Function to read a file and write the contents to another file.
     """
-    with open(file_input, 'r', encoding='UTF-8') as f1:
-        with open(file_output, 'w', encoding='UTF-8') as f2:
-            for line in f1:
-                f2.write(line)
-        f1.close()
-        f2.close()
+    with open(file_input, 'r', encoding='UTF-8') as file_one:
+        with open(file_output, 'w', encoding='UTF-8') as file_two:
+            for line in file_one:
+                file_two.write(line)
+        file_one.close()
+        file_two.close()
 
 def main(argv):
     """
@@ -24,7 +24,7 @@ def main(argv):
     """
     input_file = ''
     output_file = ''
-    opts, args = getopt.getopt(argv,"hi:o:",["ifile=","ofile="])
+    opts, arg = getopt.getopt(argv,"hi:o:",["ifile=","ofile="])
     for opt, arg in opts:
         if opt == '-h':
             print('<filename>.py -i <inputfile> -o <outputfile>')
@@ -37,7 +37,7 @@ def main(argv):
             extension = ".html"
             if extension in input_file or extension in output_file:
                 with open('index.html', 'r',encoding='UTF-8') as index:
-                 html = index.read()
+                    html = index.read()
 
                 path = os.path.abspath(output_file+'.html')
                 url = 'file://' + path
@@ -49,8 +49,8 @@ def main(argv):
                 print("No html file found.")
         else:
             print('Correct usage is: <filename>.py -i <inputfile> -o <outputfile>')
-    print('Input file is ', input_file)
-    print('Output file is ', output_file)
+    print('Input file is', input_file)
+    print('Output file is', output_file)
     convert(input_file, output_file)
 
 if __name__ == "__main__":
