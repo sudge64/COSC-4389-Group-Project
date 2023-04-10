@@ -34,6 +34,7 @@ def main(argv):
         elif opt in ("-o", "--ofile"):
             output_file = arg
         elif opt == "-b":
+            # This causes a program crash. Something about the `-b` is not recognized.
             extension = ".html"
             if extension in input_file or extension in output_file:
                 with open('index.html', 'r',encoding='UTF-8') as index:
