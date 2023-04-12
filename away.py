@@ -24,7 +24,7 @@ def main(argv):
     """
     input_file = ''
     output_file = ''
-    opts, arg = getopt.getopt(argv,"hi:o:",["ifile=","ofile="])
+    opts, arg = getopt.getopt(argv,"hi:o:b",["ifile=","ofile="])
     for opt, arg in opts:
         if opt == '-h':
             print('<filename>.py -i <inputfile> -o <outputfile>')
@@ -33,8 +33,7 @@ def main(argv):
             input_file = arg
         elif opt in ("-o", "--ofile"):
             output_file = arg
-        elif opt == "-b":
-            # This causes a program crash. Something about the `-b` is not recognized.
+        elif opt in "-b":
             extension = ".html"
             if extension in input_file or extension in output_file:
                 with open('index.html', 'r',encoding='UTF-8') as index:
