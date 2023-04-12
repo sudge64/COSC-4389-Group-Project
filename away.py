@@ -7,6 +7,17 @@ import getopt
 import webbrowser
 import os
 
+# Arrays to hold HTML tags.
+
+html_tags_heading_opening = ["<h1>", "<h2>", "<h3>", "<h4>", "<h5>", "<h6>"]
+html_tags_closing_closing = ["</h1>", "</h2>", "</h3>", "</h4>", "</h5>", "</h6>"]
+html_tags_list_opening = ["<ul>", "<ol>", "<li>"]
+html_tags_list_closing = ["</ul>", "</ol>", "</li>"]
+html_tags_table_opening = ["<table>", "<tr>", "<th>", "<td>"]
+html_tags_table_closing = ["</table>", "</tr>", "</th>", "</td>"]
+html_tags_text_opening = ["<p>", "<q>", "<body>", "<a>", "<code>", "<br>"]
+html_tags_text_closing = ["</p>", "</q>", "</body>", "</a>", "</code>"]
+
 def convert(file_input, file_output):
     """
     Function to read a file and write the contents to another file.
