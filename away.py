@@ -35,11 +35,13 @@ def main(argv):
             output_file = arg
         elif opt in "-b":
             extension = ".html"
-            if extension in input_file or extension in output_file:
+            # if extension in input_file or extension in output_file:
+            if extension in output_file:
                 with open('index.html', 'r',encoding='UTF-8') as index:
                     html = index.read()
 
-                path = os.path.abspath(output_file+'.html')
+                # path = os.path.abspath(output_file+'.html')
+                path = os.path.abspath(output_file)
                 url = 'file://' + path
 
                 with open(path, 'w', encoding='UTF-8') as opened_file:
