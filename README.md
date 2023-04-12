@@ -10,10 +10,6 @@ It's command line syntax is `python3 <filename>.py -i <inputfile> -o <outputfile
 
 **Away** - The `Markdown` to `HTML` Converter.
 
-### Members list
-
-Christian (C.J.) Wade
-
 ### General description
 
 **Away** is meant to be a `Markdown` to `HTML` converter equipped with the capability to convert `Markdown` files to `HTML` files and vice versa. It is intended to be a command line tool.
