@@ -15,7 +15,7 @@ html_tags_list_opening = ["<ul>", "<ol>", "<li>"]
 html_tags_list_closing = ["</ul>", "</ol>", "</li>"]
 html_tags_table_opening = ["<table>", "<tr>", "<th>", "<td>"]
 html_tags_table_closing = ["</table>", "</tr>", "</th>", "</td>"]
-html_tags_text_opening = ["<p>", "<q>", "<body>", "<a>", "<code>", "<br>", "<b>", "<strong>", "<i>", "<em>", "<blockquote>"]
+html_tags_text_opening = ["<p>", "<q>", "<body>", "<a>", "<code>", "<br>", "<img>", "<b>", "<strong>", "<i>", "<em>", "<blockquote>"]
 html_tags_text_closing = ["</p>", "</q>", "</body>", "</a>", "</code>", "</b>", "</strong>", "</i>", "</em>", "</blockquote>"]
 
 
