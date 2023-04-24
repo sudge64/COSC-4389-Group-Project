@@ -18,6 +18,7 @@ html_tags_table_closing = ["</table>", "</tr>", "</th>", "</td>"]
 html_tags_text_opening = ["<p>", "<q>", "<body>", "<a>", "<code>", "<br>"]
 html_tags_text_closing = ["</p>", "</q>", "</body>", "</a>", "</code>"]
 
+
 def convert(file_input, file_output):
     """
     Function to read a file and write the contents to another file.
@@ -29,13 +30,14 @@ def convert(file_input, file_output):
         file_one.close()
         file_two.close()
 
+
 def main(argv):
     """
     Main Function
     """
     input_file = ''
     output_file = ''
-    opts, arg = getopt.getopt(argv,"hi:o:b",["ifile=","ofile="])
+    opts, arg = getopt.getopt(argv, "hi:o:b", ["ifile=", "ofile="])
     for opt, arg in opts:
         if opt == '-h':
             print('<filename>.py -i <inputfile> -o <outputfile>')
@@ -48,7 +50,7 @@ def main(argv):
             extension = ".html"
             # if extension in input_file or extension in output_file:
             if extension in output_file:
-                with open('index.html', 'r',encoding='UTF-8') as index:
+                with open('index.html', 'r', encoding='UTF-8') as index:
                     html = index.read()
 
                 # path = os.path.abspath(output_file+'.html')
@@ -65,6 +67,7 @@ def main(argv):
     print('Input file is', input_file)
     print('Output file is', output_file)
     convert(input_file, output_file)
+
 
 if __name__ == "__main__":
     main(sys.argv[1:])
