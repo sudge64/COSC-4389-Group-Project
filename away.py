@@ -19,6 +19,62 @@ html_tags_text_opening = ["<p>", "<q>", "<body>", "<a>", "<code>", "<br>", "<img
 html_tags_text_closing = ["</p>", "</q>", "</body>", "</a>", "</code>", "</b>", "</strong>", "</i>", "</em>", "</blockquote>"]
 
 
+# scanner
+def validate_lexemes():
+   global sentence
+   for lexeme in sentence:
+      if (not valid_lexeme(lexeme)):
+         return False
+   return True
+
+def valid_lexeme(lexeme):
+    return lexeme in ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o",  "p",  "q",  "r",  "s",  "t",  "u",  "v",  "w",  "x",  "y",  "z",  "A",  "B",  "C",  "D",  "E",  "F",  "G",  "H",  "I",  "J",  "K",  "L",  "M",  "N",  "O",  "P",  "Q",  "R",  "S" , "T" , "U" , "V" , "W" , "X" , "Y" , "Z" , "0" , "1" , "2" , "3" , "4" , "5" , "6" , "7" , "8" , "9" , "!" , "@" , "#" , "$" , "%" , "^" , "*" , "(" , ")" , "-" , "_" , "=" , "+" , "`" , "~" , "," , "." , "/" , "?", "[" , "]" , "{" , "}" , "\"", "|"]
+   # return lexeme in ["(", ")", "x", "y", "z", ","]
+
+def getNextLexeme():
+   global lexeme
+   global lexeme_index
+   global sentence
+   global num_lexemes
+   global error
+
+   lexeme_index = lexeme_index + 1
+   if (lexeme_index < num_lexemes):
+      lexeme = sentence[lexeme_index]
+   else:
+       lexeme = " "
+
+# Parser
+
+# <contain> ::= <contain><cont>
+# <cont> ::= <title> | <para> | <table> | <list> | ∅
+
+# <title> ::= "<h"<titleNumber>">" <formattedText> "</h"<titleNumber>">"
+# <titleNumber> ::= 1 | 2 | 3 | 4 | 5 | 6
+
+# <para> ::= "<p>"<text>"</p>" | "<p>"<formattedText>"</p>"
+
+# <table> ::= "<table>"<tableRow>"</table>"
+# <tableRow> ::= "<tr>"<tableHeader>"</tr>" | "<tr>"<tableData>"</tr>"
+# <tableHeader> ::= "<th>"<formattedText>"</th>" | ∅
+# <tableData> ::= "<td>"<formattedText>"</td>" | ∅
+
+
+# (v2)<list> ::= <listUnordered> | <listOrdered> // "This might work with (v2)<listItem> below."
+# <listUnordered> ::= "<ul>"<listItem>"</ul>" // "This needs to be recursive"
+# <listOrdered> ::= "<ol>"<listItem>"</ol>" // "This needs to be recursive"
+# (v2)<listItem> ::= "<li>"<formattedText>"</li>" | <listItem>"<li>"<formattedText>"</li>" // "This might work"
+
+# <text> ::=  a | b | c | d | e | f | g | h | i | j | k | l | m | n | o | p | q | r | s | t | u | v | w | x | y | z | A | B | C | D | E | F | G | H | I | J | K | L | M | N | O | P | Q | R | S | T | U | V | W | X | Y | Z | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | ! | @ | # | $ | % | ^ | * | ( | ) | - | _ | = | + | ` | ~ | , | . | / | ? [ | ] | { | } | \ | "|"
+# <formattedText> ::= <text><tag><formattedText> | <text> | ∅
+# <tag> ::= <voidTag> | <containerTag>
+# <voidTag> ::= "<area>" | "<base>" | "<br>" | "<col>" | "<embed>" | "<hr>" | "<img>" | "<input>" | "<keygen>" | "<link>" | "<meta>" | "<param>" | "<source>" | "<track>" | "<wbr>"
+
+
+# (v2)<containerTag> ::= "<"<formattedTextTag>">" <formattedText> "</"\1">" // "Regex to force the same tag for opening and closing."
+# <formattedTextTag> ::= "code" | "b" | "strong" | "i" | "em" | "blockquote"
+
+
 def convert(file_input, file_output):
     """
     Function to read a file and write the contents to another file.
