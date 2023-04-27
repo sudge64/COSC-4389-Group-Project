@@ -27,9 +27,10 @@ def validate_lexemes():
          return False
    return True
 
+
 def valid_lexeme(lexeme):
     return lexeme in ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o",  "p",  "q",  "r",  "s",  "t",  "u",  "v",  "w",  "x",  "y",  "z",  "A",  "B",  "C",  "D",  "E",  "F",  "G",  "H",  "I",  "J",  "K",  "L",  "M",  "N",  "O",  "P",  "Q",  "R",  "S" , "T" , "U" , "V" , "W" , "X" , "Y" , "Z" , "0" , "1" , "2" , "3" , "4" , "5" , "6" , "7" , "8" , "9" , "!" , "@" , "#" , "$" , "%" , "^" , "*" , "(" , ")" , "-" , "_" , "=" , "+" , "`" , "~" , "," , "." , "/" , "?", "[" , "]" , "{" , "}" , "\"", "|"]
-   # return lexeme in ["(", ")", "x", "y", "z", ","]
+
 
 def getNextLexeme():
    global lexeme
@@ -47,7 +48,28 @@ def getNextLexeme():
 # Parser
 
 # <contain> ::= <contain><cont>
+
+def contain():
+    global lexeme
+    global lexeme_index
+    global num_lexemes
+    global lexeme_counter
+
+    contain()
+    cont()
+
 # <cont> ::= <title> | <para> | <table> | <list> | ∅
+
+def cont():
+    global lexeme
+    global lexeme_index
+    global num_lexemes
+    global lexeme_counter
+
+    title()
+    para()
+    table()
+    list()
 
 # <title> ::= "<h"<titleNumber>">" <formattedText> "</h"<titleNumber>">"
 # <titleNumber> ::= 1 | 2 | 3 | 4 | 5 | 6
@@ -127,3 +149,26 @@ def main(argv):
 
 if __name__ == "__main__":
     main(sys.argv[1:])
+    while 1:
+        line = input('Enter expression: ')
+        #  line = line[:-1]   # remove trailing newline
+        sentence = line.split()
+
+        num_lexemes = len(sentence)
+
+        lexeme_index = -1
+        error = False
+
+        if validate_lexemes():
+            getNextLexeme()
+            # symbol_expr()
+
+            # Either an error occurred or
+            # the input sentence is not entirely parsed.
+            if (error or lexeme_index < num_lexemes):
+                print('"{}" is not a sentence.'.format(line))
+            else:
+                print('"{}" is a sentence.'.format(line))
+        else:
+            print('"{}" contains invalid lexemes and, thus, '
+                    'is not a sentence.'.format(line))
