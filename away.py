@@ -21,11 +21,11 @@ import os
 
 # scanner
 def validate_lexemes():
-   global sentence
-   for lexeme in sentence:
-      if (not valid_lexeme(lexeme)):
-         return False
-   return True
+    global sentence
+    for lexeme in sentence:
+        if not valid_lexeme(lexeme):
+            return False
+    return True
 
 
 def valid_lexeme(lexeme):
@@ -33,17 +33,17 @@ def valid_lexeme(lexeme):
 
 
 def getNextLexeme():
-   global lexeme
-   global lexeme_index
-   global sentence
-   global num_lexemes
-   global error
+    global lexeme
+    global lexeme_index
+    global sentence
+    global num_lexemes
+    global error
 
-   lexeme_index = lexeme_index + 1
-   if (lexeme_index < num_lexemes):
-      lexeme = sentence[lexeme_index]
-   else:
-       lexeme = " "
+    lexeme_index = lexeme_index + 1
+    if lexeme_index < num_lexemes:
+        lexeme = sentence[lexeme_index]
+    else:
+        lexeme = " "
 
 # Parser
 
