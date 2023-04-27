@@ -72,7 +72,26 @@ def cont():
     list()
 
 # <title> ::= "<h"<titleNumber>">" <formattedText> "</h"<titleNumber>">"
+
+def title():
+    global lexeme
+    global lexeme_index
+    global num_lexemes
+    global lexeme_counter
+
+    if lexeme == "<h":
+        titleNumber()
+
 # <titleNumber> ::= 1 | 2 | 3 | 4 | 5 | 6
+
+def titleNumber():
+    global lexeme
+    global lexeme_index
+    global num_lexemes
+    global lexeme_counter
+
+    number = [1, 2, 3, 4, 5, 6]
+    return number
 
 # <para> ::= "<p>"<text>"</p>" | "<p>"<formattedText>"</p>"
 
