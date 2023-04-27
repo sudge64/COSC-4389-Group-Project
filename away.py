@@ -9,14 +9,14 @@ import os
 
 # Arrays to hold HTML tags.
 
-html_tags_heading_opening = ["<h1>", "<h2>", "<h3>", "<h4>", "<h5>", "<h6>"]
-html_tags_closing_closing = ["</h1>", "</h2>", "</h3>", "</h4>", "</h5>", "</h6>"]
-html_tags_list_opening = ["<ul>", "<ol>", "<li>"]
-html_tags_list_closing = ["</ul>", "</ol>", "</li>"]
-html_tags_table_opening = ["<table>", "<tr>", "<th>", "<td>"]
-html_tags_table_closing = ["</table>", "</tr>", "</th>", "</td>"]
-html_tags_text_opening = ["<p>", "<q>", "<body>", "<a>", "<code>", "<br>", "<img>", "<b>", "<strong>", "<i>", "<em>", "<blockquote>"]
-html_tags_text_closing = ["</p>", "</q>", "</body>", "</a>", "</code>", "</b>", "</strong>", "</i>", "</em>", "</blockquote>"]
+# html_tags_heading_opening = ["<h1>", "<h2>", "<h3>", "<h4>", "<h5>", "<h6>"]
+# html_tags_closing_closing = ["</h1>", "</h2>", "</h3>", "</h4>", "</h5>", "</h6>"]
+# html_tags_list_opening = ["<ul>", "<ol>", "<li>"]
+# html_tags_list_closing = ["</ul>", "</ol>", "</li>"]
+# html_tags_table_opening = ["<table>", "<tr>", "<th>", "<td>"]
+# html_tags_table_closing = ["</table>", "</tr>", "</th>", "</td>"]
+# html_tags_text_opening = ["<p>", "<q>", "<body>", "<a>", "<code>", "<br>", "<img>", "<b>", "<strong>", "<i>", "<em>", "<blockquote>"]
+# html_tags_text_closing = ["</p>", "</q>", "</body>", "</a>", "</code>", "</b>", "</strong>", "</i>", "</em>", "</blockquote>"]
 
 
 # scanner
@@ -85,13 +85,8 @@ def title():
 # <titleNumber> ::= 1 | 2 | 3 | 4 | 5 | 6
 
 def titleNumber():
-    global lexeme
-    global lexeme_index
-    global num_lexemes
-    global lexeme_counter
-
-    number = [1, 2, 3, 4, 5, 6]
-    return number
+    heading_number = [1, 2, 3, 4, 5, 6]
+    return heading_number
 
 # <para> ::= "<p>"<text>"</p>" | "<p>"<formattedText>"</p>"
 
