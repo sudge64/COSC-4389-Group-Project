@@ -48,7 +48,6 @@ def getNextLexeme():
 # Parser
 
 # <contain> ::= <contain><cont>
-
 def contain():
     global lexeme
     global lexeme_index
@@ -59,7 +58,6 @@ def contain():
     cont()
 
 # <cont> ::= <title> | <para> | <table> | <list> | ∅
-
 def cont():
     global lexeme
     global lexeme_index
@@ -72,7 +70,6 @@ def cont():
     list()
 
 # <title> ::= "<h"<titleNumber>">" <formattedText> "</h"<titleNumber>">"
-
 def title():
     global lexeme
     global lexeme_index
@@ -86,7 +83,6 @@ def title():
             titleNumber()
 
 # <titleNumber> ::= 1 | 2 | 3 | 4 | 5 | 6
-
 def titleNumber():
     heading_number = [1, 2, 3, 4, 5, 6]
     return heading_number
