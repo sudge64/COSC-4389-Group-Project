@@ -229,6 +229,18 @@ def formattedTextTag():
     tags = ["code", "b", "strong", "i", "em", "blockquote"]
     return tags
 
+def open_file(file_input, file_output):
+    """
+    Function to open a file
+    """
+    with open(file_input, 'r', encoding='UTF-8') as file_one:
+        line = file_one.readline()
+        count = 1
+        while line:
+            print("Line {}: {}".format(count, line.strip()))
+            line = file_one.readline()
+            count += 1
+
 def convert(file_input, file_output):
     """
     Function to read a file and write the contents to another file.
@@ -241,7 +253,7 @@ def convert(file_input, file_output):
         file_two.close()
 
 
-def main(argv):
+def read_command_line_args(argv):
     """
     Main Function
     """
