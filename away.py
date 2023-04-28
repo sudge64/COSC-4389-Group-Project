@@ -76,10 +76,10 @@ def title():
     global num_lexemes
     global lexeme_counter
 
-    if lexeme == "<h":
+    if text(lexeme) == "<h":
         titleNumber()
         formattedText()
-        if lexeme == "</h":
+        if text(lexeme) == "</h":
             titleNumber()
 
 # <titleNumber> ::= 1 | 2 | 3 | 4 | 5 | 6
@@ -94,7 +94,7 @@ def para():
     global num_lexemes
     global lexeme_counter
 
-    if lexeme == "<p>":
+    if text(lexeme) == "<p>":
         valid_lexeme(lexeme)
         formattedText()
 
@@ -105,7 +105,7 @@ def table():
     global num_lexemes
     global lexeme_counter
 
-    if lexeme == "<table>":
+    if text(lexeme) == "<table>":
         tableRow()
 
 # <tableRow> ::= "<tr>"<tableHeader>"</tr>" | "<tr>"<tableData>"</tr>"
@@ -115,7 +115,7 @@ def tableRow():
     global num_lexemes
     global lexeme_counter
 
-    if lexeme == "<tr>":
+    if text(lexeme) == "<tr>":
         tableHeader()
 
 # <tableHeader> ::= "<th>"<formattedText>"</th>" | ∅
@@ -125,7 +125,7 @@ def tableHeader():
     global num_lexemes
     global lexeme_counter
 
-    if lexeme == "<th>":
+    if text(lexeme) == "<th>":
         formattedText()
 
 # <tableData> ::= "<td>"<formattedText>"</td>" | ∅
@@ -135,7 +135,7 @@ def tableData():
     global num_lexemes
     global lexeme_counter
 
-    if lexeme == "<td>":
+    if text(lexeme) == "<td>":
         formattedText()
 
 # (v2)<list> ::= <listUnordered> | <listOrdered> // "This might work with (v2)<listItem> below."
@@ -145,9 +145,9 @@ def list():
     global num_lexemes
     global lexeme_counter
 
-    if lexeme == "<ul>":
+    if text(lexeme) == "<ul>":
         listUnordered()
-    if lexeme == "<ol>":
+    if text(lexeme) == "<ol>":
         listOrdered()
 
 # <listUnordered> ::= "<ul>"<listItem>"</ul>" // "This needs to be recursive"
@@ -175,12 +175,14 @@ def listItem():
     global num_lexemes
     global lexeme_counter
 
-    if lexeme == "<li>":
+    if text(lexeme) == "<li>":
         listItem()
         formattedText()
 
 # <text> ::=  a | b | c | d | e | f | g | h | i | j | k | l | m | n | o | p | q | r | s | t | u | v | w | x | y | z | A | B | C | D | E | F | G | H | I | J | K | L | M | N | O | P | Q | R | S | T | U | V | W | X | Y | Z | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | ! | @ | # | $ | % | ^ | * | ( | ) | - | _ | = | + | ` | ~ | , | . | / | ? [ | ] | { | } | \ | "|"
 # valid_lexeme()
+def text(lexeme):
+    return lexeme in ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o",  "p",  "q",  "r",  "s",  "t",  "u",  "v",  "w",  "x",  "y",  "z",  "A",  "B",  "C",  "D",  "E",  "F",  "G",  "H",  "I",  "J",  "K",  "L",  "M",  "N",  "O",  "P",  "Q",  "R",  "S" , "T" , "U" , "V" , "W" , "X" , "Y" , "Z" , "0" , "1" , "2" , "3" , "4" , "5" , "6" , "7" , "8" , "9" , "!" , "@" , "#" , "$" , "%" , "^" , "*" , "(" , ")" , "-" , "_" , "=" , "+" , "`" , "~" , "," , "." , "/" , "?", "[" , "]" , "{" , "}" , "\"", "|"]
 
 # <formattedText> ::= <text><tag><formattedText> | <text> | ∅
 def formattedText():
@@ -189,7 +191,7 @@ def formattedText():
     global num_lexemes
     global lexeme_counter
 
-    if valid_lexeme(lexeme):
+    if text(lexeme):
         tag()
         formattedText()
 
@@ -200,7 +202,7 @@ def tag():
     global num_lexemes
     global lexeme_counter
 
-    if lexeme == "<" and not lexeme == "</":
+    if text(lexeme) == "<" and not text(lexeme) == "</":
         voidTag()
     else:
         containerTag()
@@ -217,7 +219,7 @@ def containerTag():
     global num_lexemes
     global lexeme_counter
 
-    if lexeme == "<" and not lexeme == "</":
+    if text(lexeme) == "<" and not text(lexeme) == "</":
         formattedTextTag()
         formattedText()
         # closing tag
