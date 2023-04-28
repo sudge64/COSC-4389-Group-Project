@@ -30,7 +30,7 @@ def validate_lexemes():
 
 def valid_lexeme(lexeme):
     return lexeme in ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o",  "p",  "q",  "r",  "s",  "t",  "u",  "v",  "w",  "x",  "y",  "z",  "A",  "B",  "C",  "D",  "E",  "F",  "G",  "H",  "I",  "J",  "K",  "L",  "M",  "N",  "O",  "P",  "Q",  "R",  "S" , "T" , "U" , "V" , "W" , "X" , "Y" , "Z" , "0" , "1" , "2" , "3" , "4" , "5" , "6" , "7" , "8" , "9" , "!" , "@" , "#" , "$" , "%" , "^" , "*" , "(" , ")" , "-" , "_" , "=" , "+" , "`" , "~" , "," , "." , "/" , "?", "[" , "]" , "{" , "}" , "\"", "|"]
-
+# Add empty as valid lexeme
 
 def getNextLexeme():
     global lexeme
@@ -92,6 +92,15 @@ def titleNumber():
     return heading_number
 
 # <para> ::= "<p>"<text>"</p>" | "<p>"<formattedText>"</p>"
+def para():
+    global lexeme
+    global lexeme_index
+    global num_lexemes
+    global lexeme_counter
+
+    if lexeme == "<p>":
+        text()
+        formattedText()
 
 # <table> ::= "<table>"<tableRow>"</table>"
 # <tableRow> ::= "<tr>"<tableHeader>"</tr>" | "<tr>"<tableData>"</tr>"
