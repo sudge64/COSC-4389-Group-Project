@@ -99,21 +99,93 @@ def para():
     global lexeme_counter
 
     if lexeme == "<p>":
-        text()
+        valid_lexeme(lexeme)
         formattedText()
 
 # <table> ::= "<table>"<tableRow>"</table>"
-# <tableRow> ::= "<tr>"<tableHeader>"</tr>" | "<tr>"<tableData>"</tr>"
-# <tableHeader> ::= "<th>"<formattedText>"</th>" | ∅
-# <tableData> ::= "<td>"<formattedText>"</td>" | ∅
+def table():
+    global lexeme
+    global lexeme_index
+    global num_lexemes
+    global lexeme_counter
 
+    if lexeme == "<table>":
+        tableRow()
+
+# <tableRow> ::= "<tr>"<tableHeader>"</tr>" | "<tr>"<tableData>"</tr>"
+def tableRow():
+    global lexeme
+    global lexeme_index
+    global num_lexemes
+    global lexeme_counter
+
+    if lexeme == "<tr>":
+        tableHeader()
+
+# <tableHeader> ::= "<th>"<formattedText>"</th>" | ∅
+def tableHeader():
+    global lexeme
+    global lexeme_index
+    global num_lexemes
+    global lexeme_counter
+
+    if lexeme == "<th>":
+        formattedText()
+
+# <tableData> ::= "<td>"<formattedText>"</td>" | ∅
+def tableData():
+    global lexeme
+    global lexeme_index
+    global num_lexemes
+    global lexeme_counter
+
+    if lexeme == "<td>":
+        formattedText()
 
 # (v2)<list> ::= <listUnordered> | <listOrdered> // "This might work with (v2)<listItem> below."
+def list():
+    global lexeme
+    global lexeme_index
+    global num_lexemes
+    global lexeme_counter
+
+    if lexeme == "<ul>":
+        listUnordered()
+    if lexeme == "<ol>":
+        listOrdered()
+
 # <listUnordered> ::= "<ul>"<listItem>"</ul>" // "This needs to be recursive"
+def listUnordered():
+    global lexeme
+    global lexeme_index
+    global num_lexemes
+    global lexeme_counter
+    
+    listItem()
+
 # <listOrdered> ::= "<ol>"<listItem>"</ol>" // "This needs to be recursive"
+def listOrdered():
+    global lexeme
+    global lexeme_index
+    global num_lexemes
+    global lexeme_counter
+
+    listItem()
+
 # (v2)<listItem> ::= "<li>"<formattedText>"</li>" | <listItem>"<li>"<formattedText>"</li>" // "This might work"
+def listItem():
+    global lexeme
+    global lexeme_index
+    global num_lexemes
+    global lexeme_counter
+
+    if lexeme == "<li>":
+        listItem()
+        formattedText()
 
 # <text> ::=  a | b | c | d | e | f | g | h | i | j | k | l | m | n | o | p | q | r | s | t | u | v | w | x | y | z | A | B | C | D | E | F | G | H | I | J | K | L | M | N | O | P | Q | R | S | T | U | V | W | X | Y | Z | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | ! | @ | # | $ | % | ^ | * | ( | ) | - | _ | = | + | ` | ~ | , | . | / | ? [ | ] | { | } | \ | "|"
+# valid_lexeme()
+
 # <formattedText> ::= <text><tag><formattedText> | <text> | ∅
 def formattedText():
     global lexeme
