@@ -255,7 +255,7 @@ def convert(file_input, file_output):
 
 def read_command_line_args(argv):
     """
-    Main Function
+    Function to read arguments passed in from command line
     """
     input_file = ''
     output_file = ''
@@ -288,31 +288,14 @@ def read_command_line_args(argv):
             print('Correct usage is: <filename>.py -i <inputfile> -o <outputfile>')
     print('Input file is', input_file)
     print('Output file is', output_file)
-    convert(input_file, output_file)
+    # convert(input_file, output_file)
+    open_file(input_file, output_file)
 
+def main(argv):
+    """
+    Main Function
+    """
+    read_command_line_args(argv)
 
 if __name__ == "__main__":
     main(sys.argv[1:])
-    while 1:
-        line = input('Enter expression: ')
-        #  line = line[:-1]   # remove trailing newline
-        sentence = line.split()
-
-        num_lexemes = len(sentence)
-
-        lexeme_index = -1
-        error = False
-
-        if validate_lexemes():
-            getNextLexeme()
-            # symbol_expr()
-
-            # Either an error occurred or
-            # the input sentence is not entirely parsed.
-            if (error or lexeme_index < num_lexemes):
-                print('"{}" is not a sentence.'.format(line))
-            else:
-                print('"{}" is a sentence.'.format(line))
-        else:
-            print('"{}" contains invalid lexemes and, thus, '
-                    'is not a sentence.'.format(line))
