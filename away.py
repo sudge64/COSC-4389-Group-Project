@@ -234,12 +234,8 @@ def open_file(file_input, file_output):
     Function to open a file
     """
     with open(file_input, 'r', encoding='UTF-8') as file_one:
-        line = file_one.readline()
-        count = 1
-        while line:
-            print("Line {}: {}".format(count, line.strip()))
-            line = file_one.readline()
-            count += 1
+        for index, line in enumerate(file_one):
+            print("Line {}: {}".format(index, line.strip()))
 
 def convert(file_input, file_output):
     """
