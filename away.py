@@ -141,12 +141,14 @@ def containerTag():
     global lexeme_counter
 
     if lexeme == "<" and not lexeme == "</":
-        voidTag()
-    else:
-        containerTag()
+        formattedTextTag()
+        formattedText()
+        # closing tag
 
 # <formattedTextTag> ::= "code" | "b" | "strong" | "i" | "em" | "blockquote"
-
+def formattedTextTag():
+    tags = ["code", "b", "strong", "i", "em", "blockquote"]
+    return tags
 
 def convert(file_input, file_output):
     """
