@@ -81,6 +81,9 @@ def title():
 
     if lexeme == "<h":
         titleNumber()
+        formattedText()
+        if lexeme == "</h":
+            titleNumber()
 
 # <titleNumber> ::= 1 | 2 | 3 | 4 | 5 | 6
 
@@ -103,11 +106,45 @@ def titleNumber():
 
 # <text> ::=  a | b | c | d | e | f | g | h | i | j | k | l | m | n | o | p | q | r | s | t | u | v | w | x | y | z | A | B | C | D | E | F | G | H | I | J | K | L | M | N | O | P | Q | R | S | T | U | V | W | X | Y | Z | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | ! | @ | # | $ | % | ^ | * | ( | ) | - | _ | = | + | ` | ~ | , | . | / | ? [ | ] | { | } | \ | "|"
 # <formattedText> ::= <text><tag><formattedText> | <text> | ∅
-# <tag> ::= <voidTag> | <containerTag>
-# <voidTag> ::= "<area>" | "<base>" | "<br>" | "<col>" | "<embed>" | "<hr>" | "<img>" | "<input>" | "<keygen>" | "<link>" | "<meta>" | "<param>" | "<source>" | "<track>" | "<wbr>"
+def formattedText():
+    global lexeme
+    global lexeme_index
+    global num_lexemes
+    global lexeme_counter
 
+    if valid_lexeme(lexeme):
+        tag()
+        formattedText()
+
+# <tag> ::= <voidTag> | <containerTag>
+def tag():
+    global lexeme
+    global lexeme_index
+    global num_lexemes
+    global lexeme_counter
+
+    if lexeme == "<" and not lexeme == "</":
+        voidTag()
+    else:
+        containerTag()
+
+# <voidTag> ::= "<area>" | "<base>" | "<br>" | "<col>" | "<embed>" | "<hr>" | "<img>" | "<input>" | "<keygen>" | "<link>" | "<meta>" | "<param>" | "<source>" | "<track>" | "<wbr>"
+def voidTag():
+    voidTagArray = ["<area>", "<base>", "<br>", "<col>", "<embed>", "<hr>", "<img>", "<input>", "<keygen>", "<link>", "<meta>", "<param>", "<source>", "<track>", "<wbr>"]
+    return voidTagArray
 
 # (v2)<containerTag> ::= "<"<formattedTextTag>">" <formattedText> "</"\1">" // "Regex to force the same tag for opening and closing."
+def containerTag():
+    global lexeme
+    global lexeme_index
+    global num_lexemes
+    global lexeme_counter
+
+    if lexeme == "<" and not lexeme == "</":
+        voidTag()
+    else:
+        containerTag()
+
 # <formattedTextTag> ::= "code" | "b" | "strong" | "i" | "em" | "blockquote"
 
 
