@@ -16,8 +16,8 @@ import re
 #             return False
 #     return True
 
-def validate_tags():
-    global line
+def validate_tags(line):
+    # global line
     for tags in line:
         if not valid_tag(tags):
             return False
@@ -26,18 +26,18 @@ def validate_tags():
 def valid_tag(tags):
     return tags in ["h", "p", "table", "tr", "th", "td", "ul", "ol", "li"]
 
-def getNextLexeme():
-    global lexeme
-    global lexeme_index
-    global sentence
-    global num_lexemes
-    global error
-
-    lexeme_index = lexeme_index + 1
-    if lexeme_index < num_lexemes:
-        lexeme = sentence[lexeme_index]
-    else:
-        lexeme = " "
+# def getNextLexeme(line):
+#     global lexeme
+#     global lexeme_index
+#     global sentence
+#     global num_lexemes
+#     global error
+#
+#     lexeme_index = lexeme_index + 1
+#     if lexeme_index < num_lexemes:
+#         lexeme = line[lexeme_index]
+#     else:
+#         lexeme = " "
 
 # Parser
 
@@ -62,8 +62,7 @@ def title(line):
     """
     <title> ::= "<h"<title_number>">" <formatted_text> "</h"<title_number>">"
     """
-    global lexeme
-    global line
+    # global line
     if re.search('<h.*>', line):
         title_number(line)
         formatted_text(line)
@@ -74,7 +73,7 @@ def title_number(line):
     """
     <title_number> ::= 1 | 2 | 3 | 4 | 5 | 6
     """
-    global line
+    # global line
     if re.search('<h1.*>', line) or re.search('</h1.*>', line):
         return "1"
     if re.search('<h2.*>', line) or re.search('</h2.*>', line):
@@ -93,35 +92,35 @@ def para(line):
     <para> ::= "<p>"<text>"</p>" | "<p>"<formatted_text>"</p>"
     """
     global lexeme
-    global line
+    # global line
     if re.search('<p.*>', line):
         valid_tag(lexeme)
-        formatted_text()
+        formatted_text(line)
 
 def table(line):
     """
     <table> ::= "<table>"<table_row>"</table>"
     """
     global lexeme
-    global line
+    # global line
     if re.search('<table.*>', line):
-        table_row()
+        table_row(line)
 
 def table_row(line):
     """
     <table_row> ::= "<tr>"<table_header>"</tr>" | "<tr>"<table_data>"</tr>"
     """
     global lexeme
-    global line
+    # global line
     if re.search('<tr.*>', line):
-        table_header()
+        table_header(line)
 
 def table_header(line):
     """
     <table_header> ::= "<th>"<formatted_text>"</th>" | ∅
     """
     global lexeme
-    global line
+    # global line
     if re.search('<th.*>', line):
         formatted_text(line)
 
@@ -130,7 +129,7 @@ def table_data(line):
     <table_data> ::= "<td>"<formatted_text>"</td>" | ∅
     """
     global lexeme
-    global line
+    # global line
     if re.search('<td.*>', line):
         formatted_text(line)
 
@@ -139,7 +138,7 @@ def list_rule(line):
     (v2)<list> ::= <list_unordered> | <list_ordered> // "This might work with (v2)<list_item> below."
     """
     global lexeme
-    global line
+    # global line
     if re.search('<ul.*>', line):
         list_unordered(line)
     if re.search('<ol.*>', line):
@@ -162,7 +161,7 @@ def list_item(line):
     (v2)<list_item> ::= "<li>"<formatted_text>"</li>" | <list_item>"<li>"<formatted_text>"</li>" // "This might work"
     """
     global lexeme
-    global line
+    # global line
     if re.search('<li.*>', line):
         list_item(line)
         formatted_text(line)
@@ -181,7 +180,7 @@ def formatted_text(line):
     <formatted_text> ::= <text><tag><formatted_text> | <text> | ∅
     """
     global lexeme
-    global line
+    # global line
     if text(lexeme):
         tag(line)
         formatted_text(line)
@@ -190,7 +189,7 @@ def tag(line):
     """
     <tag> ::= <void_tag> | <container_tag>
     """
-    global line
+    # global line
     if re.search('<.*>', line) and not re.search('</.*>', line):
         void_tag()
     else:
@@ -206,7 +205,7 @@ def void_tag():
 def container_tag(line):
     # (v2)<container_tag> ::= "<"<formatted_text_tag>">" <formatted_text> "</"\1">" // "Regex to force the same tag for opening and closing."
     global lexeme
-    global line
+    # global line
     if re.search('<.*>', line) and not re.search('</.*>', line):
     # if text(lexeme) == "<" and not text(lexeme) == "</":
         formatted_text_tag()
@@ -223,7 +222,7 @@ def open_file(file_input, file_output):
     """
     Function to open a file
     """
-    global line
+    # # # global line
     global index
 
     with open(file_input, 'r', encoding='UTF-8') as file_one:
