@@ -15,7 +15,7 @@ def validate_lexemes():
         if not valid_tag(lexeme):
             return False
     return True
-asdjk;dfsjkldfaskjladfskljfdjkasdjl;k
+
 def valid_tag(lexeme):
     return lexeme in ["h", "p", "table", "tr", "th", "td", "ul", "ol", "li"]
 
