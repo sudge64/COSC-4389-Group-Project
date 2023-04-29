@@ -33,7 +33,7 @@ An example input:
 Here is the grammar that **Away** uses for `HTML` to `Markdown` conversion:
 
 ```EBNF
-<contain> ::= <contain><cont>
+<contain> ::= <cont><contain>
 <cont> ::= <title> | <para> | <table> | <list> | ∅
 
 <title> ::= "<h"<titleNumber>">" <formattedText> "</h"<titleNumber>">"

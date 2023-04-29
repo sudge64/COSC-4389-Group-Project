@@ -43,10 +43,11 @@ def getNextLexeme():
 
 def contain():
     """
-    <contain> ::= <contain><cont>
+    <contain> ::= <cont><contain>
     """
-    contain()
+
     cont()
+    contain()
 
 def cont():
     """
@@ -231,7 +232,7 @@ def open_file(file_input, file_output):
             print("Line {}: {}".format(index, line.strip()))
             if re.search('<body.*>', line):
                 print("FOUND!")
-                # contain()
+                contain()
 
 def convert(file_input, file_output):
     """
