@@ -233,6 +233,7 @@ def open_file(file_input, file_output):
             if re.search('<body.*>', line):
                 print("FOUND!")
                 contain()
+    file_one.close()
 
 def convert(file_input, file_output):
     """
