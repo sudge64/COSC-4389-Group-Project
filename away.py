@@ -41,36 +41,36 @@ def getNextLexeme():
 
 # Parser
 
-def contain():
+def contain(line):
     """
     <contain> ::= <cont><contain>
     """
 
-    cont()
-    contain()
+    cont(line)
+    contain(line)
 
-def cont():
+def cont(line):
     """
     <cont> ::= <title> | <para> | <table> | <list> | ∅
     """
-    title()
-    para()
-    table()
-    list_rule()
+    title(line)
+    para(line)
+    table(line)
+    list_rule(line)
 
-def title():
+def title(line):
     """
     <title> ::= "<h"<title_number>">" <formatted_text> "</h"<title_number>">"
     """
     global lexeme
     global line
     if re.search('<h.*>', line):
-        title_number()
-        formatted_text()
+        title_number(line)
+        formatted_text(line)
         if re.search('</h.*>', line):
-            title_number()
+            title_number(line)
 
-def title_number():
+def title_number(line):
     """
     <title_number> ::= 1 | 2 | 3 | 4 | 5 | 6
     """
@@ -88,7 +88,7 @@ def title_number():
     if re.search('<h6.*>', line) or re.search('</h6.*>', line):
         return "6"
 
-def para():
+def para(line):
     """
     <para> ::= "<p>"<text>"</p>" | "<p>"<formatted_text>"</p>"
     """
@@ -98,7 +98,7 @@ def para():
         valid_tag(lexeme)
         formatted_text()
 
-def table():
+def table(line):
     """
     <table> ::= "<table>"<table_row>"</table>"
     """
@@ -107,7 +107,7 @@ def table():
     if re.search('<table.*>', line):
         table_row()
 
-def table_row():
+def table_row(line):
     """
     <table_row> ::= "<tr>"<table_header>"</tr>" | "<tr>"<table_data>"</tr>"
     """
@@ -116,56 +116,56 @@ def table_row():
     if re.search('<tr.*>', line):
         table_header()
 
-def table_header():
+def table_header(line):
     """
     <table_header> ::= "<th>"<formatted_text>"</th>" | ∅
     """
     global lexeme
     global line
     if re.search('<th.*>', line):
-        formatted_text()
+        formatted_text(line)
 
-def table_data():
+def table_data(line):
     """
     <table_data> ::= "<td>"<formatted_text>"</td>" | ∅
     """
     global lexeme
     global line
     if re.search('<td.*>', line):
-        formatted_text()
+        formatted_text(line)
 
-def list_rule():
+def list_rule(line):
     """
     (v2)<list> ::= <list_unordered> | <list_ordered> // "This might work with (v2)<list_item> below."
     """
     global lexeme
     global line
     if re.search('<ul.*>', line):
-        list_unordered()
+        list_unordered(line)
     if re.search('<ol.*>', line):
-        list_ordered()
+        list_ordered(line)
 
-def list_unordered():
+def list_unordered(line):
     """
     <list_unordered> ::= "<ul>"<list_item>"</ul>" // "This needs to be recursive"
     """
-    list_item()
+    list_item(line)
 
-def list_ordered():
+def list_ordered(line):
     """
     <list_ordered> ::= "<ol>"<list_item>"</ol>" // "This needs to be recursive"
     """
-    list_item()
+    list_item(line)
 
-def list_item():
+def list_item(line):
     """
     (v2)<list_item> ::= "<li>"<formatted_text>"</li>" | <list_item>"<li>"<formatted_text>"</li>" // "This might work"
     """
     global lexeme
     global line
     if re.search('<li.*>', line):
-        list_item()
-        formatted_text()
+        list_item(line)
+        formatted_text(line)
 
 
 # valid_tag()?
@@ -176,26 +176,25 @@ def text(character):
     return character in ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o",  "p",  "q",  "r",  "s",  "t",  "u",  "v",  "w",  "x",  "y",  "z",  "A",  "B",  "C",  "D",  "E",  "F",  "G",  "H",  "I",  "J",  "K",  "L",  "M",  "N",  "O",  "P",  "Q",  "R",  "S" , "T" , "U" , "V" , "W" , "X" , "Y" , "Z" , "0" , "1" , "2" , "3" , "4" , "5" , "6" , "7" , "8" , "9" , "!" , "@" , "#" , "$" , "%" , "^" , "*" , "(" , ")" , "-" , "_" , "=" , "+" , "`" , "~" , "," , "." , "/" , "?", "[" , "]" , "{" , "}" , "\"", "|", "", " "]
 
 # TODO
-def formatted_text():
+def formatted_text(line):
     """
     <formatted_text> ::= <text><tag><formatted_text> | <text> | ∅
     """
     global lexeme
     global line
     if text(lexeme):
-        tag()
-        formatted_text()
+        tag(line)
+        formatted_text(line)
 
-def tag():
+def tag(line):
     """
     <tag> ::= <void_tag> | <container_tag>
     """
-    global lexeme
     global line
     if re.search('<.*>', line) and not re.search('</.*>', line):
         void_tag()
     else:
-        container_tag()
+        container_tag(line)
 
 def void_tag():
     """
@@ -204,14 +203,14 @@ def void_tag():
     void_tag_array = ["<area>", "<base>", "<br>", "<col>", "<embed>", "<hr>", "<img>", "<input>", "<keygen>", "<link>", "<meta>", "<param>", "<source>", "<track>", "<wbr>"]
     return void_tag_array
 
-def container_tag():
+def container_tag(line):
     # (v2)<container_tag> ::= "<"<formatted_text_tag>">" <formatted_text> "</"\1">" // "Regex to force the same tag for opening and closing."
     global lexeme
     global line
     if re.search('<.*>', line) and not re.search('</.*>', line):
     # if text(lexeme) == "<" and not text(lexeme) == "</":
         formatted_text_tag()
-        formatted_text()
+        formatted_text(line)
         # closing tag
 
 
@@ -232,7 +231,7 @@ def open_file(file_input, file_output):
             print("Line {}: {}".format(index, line.strip()))
             if re.search('<body.*>', line):
                 print("FOUND!")
-                contain()
+                contain(line)
     file_one.close()
 
 def convert(file_input, file_output):
