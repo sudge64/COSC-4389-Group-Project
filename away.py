@@ -36,21 +36,11 @@ def getNextLexeme():
 
 # <contain> ::= <contain><cont>
 def contain():
-    global lexeme
-    global lexeme_index
-    global num_lexemes
-    global lexeme_counter
-
     contain()
     cont()
 
 # <cont> ::= <title> | <para> | <table> | <list> | ∅
 def cont():
-    global lexeme
-    global lexeme_index
-    global num_lexemes
-    global lexeme_counter
-
     title()
     para()
     table()
@@ -59,10 +49,6 @@ def cont():
 # <title> ::= "<h"<title_number>">" <formatted_text> "</h"<title_number>">"
 def title():
     global lexeme
-    global lexeme_index
-    global num_lexemes
-    global lexeme_counter
-
     if text(lexeme) == "<h":
         title_number()
         formatted_text()
@@ -77,10 +63,6 @@ def title_number():
 # <para> ::= "<p>"<text>"</p>" | "<p>"<formatted_text>"</p>"
 def para():
     global lexeme
-    global lexeme_index
-    global num_lexemes
-    global lexeme_counter
-
     if text(lexeme) == "<p>":
         valid_lexeme(lexeme)
         formatted_text()
@@ -88,50 +70,30 @@ def para():
 # <table> ::= "<table>"<table_row>"</table>"
 def table():
     global lexeme
-    global lexeme_index
-    global num_lexemes
-    global lexeme_counter
-
     if text(lexeme) == "<table>":
         table_row()
 
 # <table_row> ::= "<tr>"<table_header>"</tr>" | "<tr>"<table_data>"</tr>"
 def table_row():
     global lexeme
-    global lexeme_index
-    global num_lexemes
-    global lexeme_counter
-
     if text(lexeme) == "<tr>":
         table_header()
 
 # <table_header> ::= "<th>"<formatted_text>"</th>" | ∅
 def table_header():
     global lexeme
-    global lexeme_index
-    global num_lexemes
-    global lexeme_counter
-
     if text(lexeme) == "<th>":
         formatted_text()
 
 # <table_data> ::= "<td>"<formatted_text>"</td>" | ∅
 def table_data():
     global lexeme
-    global lexeme_index
-    global num_lexemes
-    global lexeme_counter
-
     if text(lexeme) == "<td>":
         formatted_text()
 
 # (v2)<list> ::= <list_unordered> | <list_ordered> // "This might work with (v2)<list_item> below."
 def list_rule():
     global lexeme
-    global lexeme_index
-    global num_lexemes
-    global lexeme_counter
-
     if text(lexeme) == "<ul>":
         list_unordered()
     if text(lexeme) == "<ol>":
@@ -139,29 +101,15 @@ def list_rule():
 
 # <list_unordered> ::= "<ul>"<list_item>"</ul>" // "This needs to be recursive"
 def list_unordered():
-    global lexeme
-    global lexeme_index
-    global num_lexemes
-    global lexeme_counter
-    
     list_item()
 
 # <list_ordered> ::= "<ol>"<list_item>"</ol>" // "This needs to be recursive"
 def list_ordered():
-    global lexeme
-    global lexeme_index
-    global num_lexemes
-    global lexeme_counter
-
     list_item()
 
 # (v2)<list_item> ::= "<li>"<formatted_text>"</li>" | <list_item>"<li>"<formatted_text>"</li>" // "This might work"
 def list_item():
     global lexeme
-    global lexeme_index
-    global num_lexemes
-    global lexeme_counter
-
     if text(lexeme) == "<li>":
         list_item()
         formatted_text()
@@ -174,10 +122,6 @@ def text(lexeme):
 # <formatted_text> ::= <text><tag><formatted_text> | <text> | ∅
 def formatted_text():
     global lexeme
-    global lexeme_index
-    global num_lexemes
-    global lexeme_counter
-
     if text(lexeme):
         tag()
         formatted_text()
@@ -185,10 +129,6 @@ def formatted_text():
 # <tag> ::= <void_tag> | <container_tag>
 def tag():
     global lexeme
-    global lexeme_index
-    global num_lexemes
-    global lexeme_counter
-
     if text(lexeme) == "<" and not text(lexeme) == "</":
         void_tag()
     else:
@@ -202,10 +142,6 @@ def void_tag():
 # (v2)<container_tag> ::= "<"<formatted_text_tag>">" <formatted_text> "</"\1">" // "Regex to force the same tag for opening and closing."
 def container_tag():
     global lexeme
-    global lexeme_index
-    global num_lexemes
-    global lexeme_counter
-
     if text(lexeme) == "<" and not text(lexeme) == "</":
         formatted_text_tag()
         formatted_text()
@@ -220,6 +156,9 @@ def open_file(file_input, file_output):
     """
     Function to open a file
     """
+    global line
+    global index
+
     with open(file_input, 'r', encoding='UTF-8') as file_one:
         for index, line in enumerate(file_one):
             print("Line {}: {}".format(index, line.strip()))
