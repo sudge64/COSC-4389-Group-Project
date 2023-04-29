@@ -9,15 +9,22 @@ import os
 import re
 
 # scanner
-def validate_lexemes():
-    global sentence
-    for lexeme in sentence:
-        if not valid_tag(lexeme):
+# def validate_lexemes():
+#     global sentence
+#     for lexeme in sentence:
+#         if not valid_tag(lexeme):
+#             return False
+#     return True
+
+def validate_tags():
+    global line
+    for tags in line:
+        if not valid_tag(tags):
             return False
     return True
 
-def valid_tag(lexeme):
-    return lexeme in ["h", "p", "table", "tr", "th", "td", "ul", "ol", "li"]
+def valid_tag(tags):
+    return tags in ["h", "p", "table", "tr", "th", "td", "ul", "ol", "li"]
 
 def getNextLexeme():
     global lexeme
@@ -56,18 +63,29 @@ def title():
     """
     global lexeme
     global line
-    if text(lexeme) == "<h":
+    if re.search('<h.*>', line):
         title_number()
         formatted_text()
-        if text(lexeme) == "</h":
+        if re.search('</h.*>', line):
             title_number()
 
 def title_number():
     """
     <title_number> ::= 1 | 2 | 3 | 4 | 5 | 6
     """
-    heading_number = [1, 2, 3, 4, 5, 6]
-    return heading_number
+    global line
+    if re.search('<h1.*>', line) or re.search('</h1.*>', line):
+        return "1"
+    if re.search('<h2.*>', line) or re.search('</h2.*>', line):
+        return "2"
+    if re.search('<h3.*>', line) or re.search('</h3.*>', line):
+        return "3"
+    if re.search('<h4.*>', line) or re.search('</h4.*>', line):
+        return "4"
+    if re.search('<h5.*>', line) or re.search('</h5.*>', line):
+        return "5"
+    if re.search('<h6.*>', line) or re.search('</h6.*>', line):
+        return "6"
 
 def para():
     """
@@ -75,7 +93,7 @@ def para():
     """
     global lexeme
     global line
-    if text(lexeme) == "<p>":
+    if re.search('<p.*>', line):
         valid_tag(lexeme)
         formatted_text()
 
@@ -85,7 +103,7 @@ def table():
     """
     global lexeme
     global line
-    if text(lexeme) == "<table>":
+    if re.search('<table.*>', line):
         table_row()
 
 def table_row():
@@ -94,7 +112,7 @@ def table_row():
     """
     global lexeme
     global line
-    if text(lexeme) == "<tr>":
+    if re.search('<tr.*>', line):
         table_header()
 
 def table_header():
@@ -103,7 +121,7 @@ def table_header():
     """
     global lexeme
     global line
-    if text(lexeme) == "<th>":
+    if re.search('<th.*>', line):
         formatted_text()
 
 def table_data():
@@ -112,7 +130,7 @@ def table_data():
     """
     global lexeme
     global line
-    if text(lexeme) == "<td>":
+    if re.search('<td.*>', line):
         formatted_text()
 
 def list_rule():
@@ -121,9 +139,9 @@ def list_rule():
     """
     global lexeme
     global line
-    if text(lexeme) == "<ul>":
+    if re.search('<ul.*>', line):
         list_unordered()
-    if text(lexeme) == "<ol>":
+    if re.search('<ol.*>', line):
         list_ordered()
 
 def list_unordered():
@@ -144,17 +162,17 @@ def list_item():
     """
     global lexeme
     global line
-    if text(lexeme) == "<li>":
+    if re.search('<li.*>', line):
         list_item()
         formatted_text()
 
 
 # valid_tag()?
-def text(lexeme):
+def text(character):
     """
     <text> ::=  a | b | c | d | e | f | g | h | i | j | k | l | m | n | o | p | q | r | s | t | u | v | w | x | y | z | A | B | C | D | E | F | G | H | I | J | K | L | M | N | O | P | Q | R | S | T | U | V | W | X | Y | Z | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | ! | @ | # | $ | % | ^ | * | ( | ) | - | _ | = | + | ` | ~ | , | . | / | ? [ | ] | { | } | \ | "|"
     """
-    return lexeme in ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o",  "p",  "q",  "r",  "s",  "t",  "u",  "v",  "w",  "x",  "y",  "z",  "A",  "B",  "C",  "D",  "E",  "F",  "G",  "H",  "I",  "J",  "K",  "L",  "M",  "N",  "O",  "P",  "Q",  "R",  "S" , "T" , "U" , "V" , "W" , "X" , "Y" , "Z" , "0" , "1" , "2" , "3" , "4" , "5" , "6" , "7" , "8" , "9" , "!" , "@" , "#" , "$" , "%" , "^" , "*" , "(" , ")" , "-" , "_" , "=" , "+" , "`" , "~" , "," , "." , "/" , "?", "[" , "]" , "{" , "}" , "\"", "|", "", " "]
+    return character in ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o",  "p",  "q",  "r",  "s",  "t",  "u",  "v",  "w",  "x",  "y",  "z",  "A",  "B",  "C",  "D",  "E",  "F",  "G",  "H",  "I",  "J",  "K",  "L",  "M",  "N",  "O",  "P",  "Q",  "R",  "S" , "T" , "U" , "V" , "W" , "X" , "Y" , "Z" , "0" , "1" , "2" , "3" , "4" , "5" , "6" , "7" , "8" , "9" , "!" , "@" , "#" , "$" , "%" , "^" , "*" , "(" , ")" , "-" , "_" , "=" , "+" , "`" , "~" , "," , "." , "/" , "?", "[" , "]" , "{" , "}" , "\"", "|", "", " "]
 
 def formatted_text():
     """
@@ -172,7 +190,7 @@ def tag():
     """
     global lexeme
     global line
-    if text(lexeme) == "<" and not text(lexeme) == "</":
+    if re.search('<.*>', line) and not re.search('</.*>', line):
         void_tag()
     else:
         container_tag()
@@ -212,6 +230,7 @@ def open_file(file_input, file_output):
             print("Line {}: {}".format(index, line.strip()))
             if re.search('<body.*>', line):
                 print("FOUND!")
+                # contain()
 
 def convert(file_input, file_output):
     """
