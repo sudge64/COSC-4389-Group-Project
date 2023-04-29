@@ -63,10 +63,11 @@ def title(line):
     <title> ::= "<h"<title_number>">" <formatted_text> "</h"<title_number>">"
     """
     # global line
-    if re.search('<h.*>', line):
+    if re.search(r'<h.*>', line):
+        print("Here's <h.*>")
         title_number(line)
         formatted_text(line)
-        if re.search('</h.*>', line):
+        if re.search(r'</h.*>', line):
             title_number(line)
 
 def title_number(line):
@@ -119,7 +120,6 @@ def table_header(line):
     """
     <table_header> ::= "<th>"<formatted_text>"</th>" | ∅
     """
-    global lexeme
     # global line
     if re.search('<th.*>', line):
         formatted_text(line)
@@ -128,7 +128,6 @@ def table_data(line):
     """
     <table_data> ::= "<td>"<formatted_text>"</td>" | ∅
     """
-    global lexeme
     # global line
     if re.search('<td.*>', line):
         formatted_text(line)
@@ -137,7 +136,6 @@ def list_rule(line):
     """
     (v2)<list> ::= <list_unordered> | <list_ordered> // "This might work with (v2)<list_item> below."
     """
-    global lexeme
     # global line
     if re.search('<ul.*>', line):
         list_unordered(line)
@@ -160,7 +158,6 @@ def list_item(line):
     """
     (v2)<list_item> ::= "<li>"<formatted_text>"</li>" | <list_item>"<li>"<formatted_text>"</li>" // "This might work"
     """
-    global lexeme
     # global line
     if re.search('<li.*>', line):
         list_item(line)
@@ -204,7 +201,6 @@ def void_tag():
 
 def container_tag(line):
     # (v2)<container_tag> ::= "<"<formatted_text_tag>">" <formatted_text> "</"\1">" // "Regex to force the same tag for opening and closing."
-    global lexeme
     # global line
     if re.search('<.*>', line) and not re.search('</.*>', line):
     # if text(lexeme) == "<" and not text(lexeme) == "</":
@@ -222,7 +218,7 @@ def open_file(file_input, file_output):
     """
     Function to open a file
     """
-    # # # global line
+    # global line
     global index
 
     with open(file_input, 'r', encoding='UTF-8') as file_one:
