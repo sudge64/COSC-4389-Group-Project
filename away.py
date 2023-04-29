@@ -6,18 +6,19 @@ import sys
 import getopt
 import webbrowser
 import os
+import re
 
 # scanner
 def validate_lexemes():
     global sentence
     for lexeme in sentence:
-        if not valid_lexeme(lexeme):
+        if not valid_tag(lexeme):
             return False
     return True
 
 
-def valid_lexeme(lexeme):
-    return lexeme in ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o",  "p",  "q",  "r",  "s",  "t",  "u",  "v",  "w",  "x",  "y",  "z",  "A",  "B",  "C",  "D",  "E",  "F",  "G",  "H",  "I",  "J",  "K",  "L",  "M",  "N",  "O",  "P",  "Q",  "R",  "S" , "T" , "U" , "V" , "W" , "X" , "Y" , "Z" , "0" , "1" , "2" , "3" , "4" , "5" , "6" , "7" , "8" , "9" , "!" , "@" , "#" , "$" , "%" , "^" , "*" , "(" , ")" , "-" , "_" , "=" , "+" , "`" , "~" , "," , "." , "/" , "?", "[" , "]" , "{" , "}" , "\"", "|", "", " "]
+def valid_tag(lexeme):
+    return lexeme in ["h", "p", "table", "tr", "th", "td", "ul", "ol", "li"]
 
 def getNextLexeme():
     global lexeme
@@ -64,7 +65,7 @@ def title_number():
 def para():
     global lexeme
     if text(lexeme) == "<p>":
-        valid_lexeme(lexeme)
+        valid_tag(lexeme)
         formatted_text()
 
 # <table> ::= "<table>"<table_row>"</table>"
@@ -115,7 +116,7 @@ def list_item():
         formatted_text()
 
 # <text> ::=  a | b | c | d | e | f | g | h | i | j | k | l | m | n | o | p | q | r | s | t | u | v | w | x | y | z | A | B | C | D | E | F | G | H | I | J | K | L | M | N | O | P | Q | R | S | T | U | V | W | X | Y | Z | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | ! | @ | # | $ | % | ^ | * | ( | ) | - | _ | = | + | ` | ~ | , | . | / | ? [ | ] | { | } | \ | "|"
-# valid_lexeme()
+# valid_tag()
 def text(lexeme):
     return lexeme in ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o",  "p",  "q",  "r",  "s",  "t",  "u",  "v",  "w",  "x",  "y",  "z",  "A",  "B",  "C",  "D",  "E",  "F",  "G",  "H",  "I",  "J",  "K",  "L",  "M",  "N",  "O",  "P",  "Q",  "R",  "S" , "T" , "U" , "V" , "W" , "X" , "Y" , "Z" , "0" , "1" , "2" , "3" , "4" , "5" , "6" , "7" , "8" , "9" , "!" , "@" , "#" , "$" , "%" , "^" , "*" , "(" , ")" , "-" , "_" , "=" , "+" , "`" , "~" , "," , "." , "/" , "?", "[" , "]" , "{" , "}" , "\"", "|", "", " "]
 
@@ -162,6 +163,9 @@ def open_file(file_input, file_output):
     with open(file_input, 'r', encoding='UTF-8') as file_one:
         for index, line in enumerate(file_one):
             print("Line {}: {}".format(index, line.strip()))
+            # if re.search('<body*', line) in line:
+            if re.search('<body.*>', line):
+                print("FOUND!")
 
 def convert(file_input, file_output):
     """
