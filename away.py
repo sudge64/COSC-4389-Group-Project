@@ -29,7 +29,7 @@ def cont(current):
     elif re.search('<tr.*>', current):
         list_rule(current)
     else:
-        cont(current)
+        print("Empty")
 
 def title(current):
     """
@@ -104,6 +104,8 @@ def table_header(current):
     # global line
     if re.search('<th.*>', current):
         formatted_text(current)
+    else:
+        print("Empty")
 
 def table_data(current):
     """
@@ -112,6 +114,8 @@ def table_data(current):
     # global line
     if re.search('<td.*>', current):
         formatted_text(current)
+    else:
+        print("Empty")
 
 def list_rule(current):
     """
@@ -189,9 +193,8 @@ def container_tag(current):
     """
     (v2)<container_tag> ::= "<"<formatted_text_tag>">" <formatted_text> "</"\1">" // "Regex to force the same tag for opening and closing."
     """
-    # global line
+
     if re.search('<.*>', current) and not re.search('</.*>', current):
-    # if text(lexeme) == "<" and not text(lexeme) == "</":
         formatted_text_tag()
         formatted_text(current)
         # closing tag
