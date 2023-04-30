@@ -243,21 +243,10 @@ def formatted_text_tag():
     tags = ["code", "b", "strong", "i", "em", "blockquote"]
     return tags
 
-def open_file(file_input, file_output):
+def open_file(file_input):
     """
     Function to open a file and save each line to a list
     """
-    # global line
-    # global index
-
-    # with open(file_input, 'r', encoding='UTF-8') as file_one:
-    #     for index, line in enumerate(file_one):
-    #         print("Line {}: {}".format(index, line.strip()))
-    #         list_of_lines.append(line)
-            # if re.search('<body.*>', line):
-            #    print("FOUND!")
-            #    contain()
-    # file_one.close()
 
     with open(file_input, 'r', encoding='UTF-8') as file_one:
         list_of_lines = file_one.readlines()
@@ -283,8 +272,8 @@ def open_file(file_input, file_output):
     print(flag_start)
     print(flag_end)
 
-    for x in range(flag_start,flag_end):
-        contain(list_of_lines[x])
+    for index in range(flag_start,flag_end):
+        contain(list_of_lines[index])
 
 def convert(file_input, file_output):
     """
