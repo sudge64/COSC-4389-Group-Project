@@ -59,8 +59,8 @@ def cont(current):
     <cont> ::= <title> | <para> | <table> | <list> | ∅
     """
     if re.search('<h+[1-6].*>', current):
-        # title(current)
         print("FOUND! {}".format(current), end="")
+        title(current)
     elif re.search('<p.*>', current):
         para(current)
     elif re.search('<table.*>', current):
@@ -78,7 +78,7 @@ def title(current):
     if re.search('<h1.*>', current):
         print("Here's <h1.*>")
         formatted_text(current)
-        if re.search('</h.*>', current):
+        if re.search('</h1.*>', current):
             print("Heading end", end="")
 
     if re.search('<h2.*>', current):
