@@ -8,6 +8,8 @@ import webbrowser
 import os
 import re
 
+list_of_lines = []
+
 # scanner
 # def validate_lexemes():
 #     global sentence
@@ -222,7 +224,7 @@ def formatted_text_tag():
 
 def open_file(file_input, file_output):
     """
-    Function to open a file
+    Function to open a file and save each line to a list
     """
     # global line
     # global index
@@ -230,9 +232,10 @@ def open_file(file_input, file_output):
     with open(file_input, 'r', encoding='UTF-8') as file_one:
         for index, line in enumerate(file_one):
             print("Line {}: {}".format(index, line.strip()))
-            if re.search('<body.*>', line):
-                print("FOUND!")
-                contain(line)
+            list_of_lines.append(line)
+            # if re.search('<body.*>', line):
+            #    print("FOUND!")
+            #    contain(line)
     file_one.close()
 
 def convert(file_input, file_output):
