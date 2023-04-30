@@ -8,45 +8,6 @@ import webbrowser
 import os
 import re
 
-# scanner
-# def validate_lexemes():
-#     global sentence
-#     for lexeme in sentence:
-#         if not valid_tag(lexeme):
-#             return False
-#     return True
-
-def validate_tags(list_of_line):
-    """
-    Function to validate tags
-    """
-    # global line
-    for tags in list_of_line:
-        if not valid_tag(tags):
-            return False
-    return True
-
-def valid_tag(tags):
-    """
-    Function to hold valid HTML tags.
-    """
-    return tags in ["h", "p", "table", "tr", "th", "td", "ul", "ol", "li"]
-
-# def getNextLexeme():
-#     global lexeme
-#     global lexeme_index
-#     global sentence
-#     global num_lexemes
-#     global error
-#
-#     lexeme_index = lexeme_index + 1
-#     if lexeme_index < num_lexemes:
-#         lexeme = line[lexeme_index]
-#     else:
-#         lexeme = " "
-
-# Parser
-
 def contain(current):
     """
     <contain> ::= <cont><contain>
@@ -118,8 +79,6 @@ def para(current):
     # global lexeme
     # global line
     if re.search('<p.*>', current):
-        # valid_tag(list_of_line)
-        valid_tag(current)
         formatted_text(current)
 
 def table(current):
@@ -185,7 +144,6 @@ def list_item(current):
         list_item(current)
         formatted_text(current)
 
-# valid_tag()?
 def text(character):
     """
     <text> ::=  a | b | c | d | e | f | g | h | i | j | k | l | m | n | o | p | q | r | s | t | u | v | w | x | y | z | A | B | C | D | E | F | G | H | I | J | K | L | M | N | O | P | Q | R | S | T | U | V | W | X | Y | Z | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | ! | @ | # | $ | % | ^ | * | ( | ) | - | _ | = | + | ` | ~ | , | . | / | ? [ | ] | { | } | \\ | "|"
@@ -195,7 +153,7 @@ def text(character):
         return True
     else:
         return False
-    # return character in ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o",  "p",  "q",  "r",  "s",  "t",  "u",  "v",  "w",  "x",  "y",  "z",  "A",  "B",  "C",  "D",  "E",  "F",  "G",  "H",  "I",  "J",  "K",  "L",  "M",  "N",  "O",  "P",  "Q",  "R",  "S" , "T" , "U" , "V" , "W" , "X" , "Y" , "Z" , "0" , "1" , "2" , "3" , "4" , "5" , "6" , "7" , "8" , "9" , "!" , "@" , "#" , "$" , "%" , "^" , "*" , "(" , ")" , "-" , "_" , "=" , "+" , "`" , "~" , "," , "." , "/" , "?", "[" , "]" , "{" , "}" , "\"", "|", "", " "]
+
 
 def formatted_text(current):
     """
@@ -209,7 +167,6 @@ def formatted_text(current):
         text(current)
     else:
         print("Empty")
-    
 
 def tag(current):
     """
