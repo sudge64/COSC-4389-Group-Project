@@ -36,8 +36,7 @@ Here is the grammar that **Away** uses for `HTML` to `Markdown` conversion:
 <contain> ::= <cont><contain>
 <cont> ::= <title> | <para> | <table> | <list> | ∅
 
-<title> ::= "<h"<titleNumber>">" <formattedText> "</h"<titleNumber>">"
-<titleNumber> ::= 1 | 2 | 3 | 4 | 5 | 6
+<title> ::= "<h1>" <formattedText> "</h1>" | "<h2>" <formattedText> "</h2>" | "<h3>" <formattedText> "</h3>" | "<h4>" <formattedText> "</h4>" | "<h5>" <formattedText> "</h5>" | "<h6>" <formattedText> "</h6>"
 
 <para> ::= "<p>"<text>"</p>" | "<p>"<formattedText>"</p>"
 

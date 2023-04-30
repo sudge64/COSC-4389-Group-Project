@@ -59,43 +59,57 @@ def cont(current):
     <cont> ::= <title> | <para> | <table> | <list> | ∅
     """
     if re.search('<h.*>', current):
-        title(current)
+        # title(current)
+        print("FOUND! {}".format(current), end="")
     elif re.search('<p.*>', current):
         para(current)
     elif re.search('<table.*>', current):
         table(current)
     elif re.search('<tr.*>', current):
         list_rule(current)
+    else:
+        cont(current)
 
 def title(current):
     """
-    <title> ::= "<h"<title_number>">" <formatted_text> "</h"<title_number>">"
+    <title> ::= "<h1>" <formattedText> "</h1>" | "<h2>" <formattedText> "</h2>" | "<h3>" <formattedText> "</h3>" | "<h4>" <formattedText> "</h4>" | "<h5>" <formattedText> "</h5>" | "<h6>" <formattedText> "</h6>"
     """
-    # global line
-    if re.search('<h.*>', current):
-        print("Here's <h.*>")
-        title_number(current)
+
+    if re.search('<h1.*>', current):
+        print("Here's <h1.*>")
         formatted_text(current)
         if re.search('</h.*>', current):
-            title_number(current)
+            print("Heading end", end="")
 
-def title_number(current):
-    """
-    <title_number> ::= 1 | 2 | 3 | 4 | 5 | 6
-    """
-    # global line
-    if re.search('<h1.*>', current) or re.search('</h1.*>', current):
-        return "1"
-    elif re.search('<h2.*>', current) or re.search('</h2.*>', current):
-        return "2"
-    elif re.search('<h3.*>', current) or re.search('</h3.*>', current):
-        return "3"
-    elif re.search('<h4.*>', current) or re.search('</h4.*>', current):
-        return "4"
-    elif re.search('<h5.*>', current) or re.search('</h5.*>', current):
-        return "5"
-    elif re.search('<h6.*>', current) or re.search('</h6.*>', current):
-        return "6"
+    if re.search('<h2.*>', current):
+        print("Here's <h2.*>")
+        formatted_text(current)
+        if re.search('</h2.*>', current):
+            print("Heading end", end="")
+
+    if re.search('<h3.*>', current):
+        print("Here's <h3.*>")
+        formatted_text(current)
+        if re.search('</h3.*>', current):
+            print("Heading end", end="")
+
+    if re.search('<h4.*>', current):
+        print("Here's <h4.*>")
+        formatted_text(current)
+        if re.search('</4.*>', current):
+            print("Heading end", end="")
+
+    if re.search('<h5.*>', current):
+        print("Here's <h5.*>")
+        formatted_text(current)
+        if re.search('</h5.*>', current):
+            print("Heading end", end="")
+
+    if re.search('<h6.*>', current):
+        print("Here's <h6.*>")
+        formatted_text(current)
+        if re.search('</h6.*>', current):
+            print("Heading end", end="")
 
 def para(current):
     """
