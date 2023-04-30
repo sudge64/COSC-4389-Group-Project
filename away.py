@@ -167,7 +167,10 @@ def text(character):
     """
     <text> ::=  a | b | c | d | e | f | g | h | i | j | k | l | m | n | o | p | q | r | s | t | u | v | w | x | y | z | A | B | C | D | E | F | G | H | I | J | K | L | M | N | O | P | Q | R | S | T | U | V | W | X | Y | Z | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | ! | @ | # | $ | % | ^ | * | ( | ) | - | _ | = | + | ` | ~ | , | . | / | ? [ | ] | { | } | \ | "|"
     """
-    return character in ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o",  "p",  "q",  "r",  "s",  "t",  "u",  "v",  "w",  "x",  "y",  "z",  "A",  "B",  "C",  "D",  "E",  "F",  "G",  "H",  "I",  "J",  "K",  "L",  "M",  "N",  "O",  "P",  "Q",  "R",  "S" , "T" , "U" , "V" , "W" , "X" , "Y" , "Z" , "0" , "1" , "2" , "3" , "4" , "5" , "6" , "7" , "8" , "9" , "!" , "@" , "#" , "$" , "%" , "^" , "*" , "(" , ")" , "-" , "_" , "=" , "+" , "`" , "~" , "," , "." , "/" , "?", "[" , "]" , "{" , "}" , "\"", "|", "", " "]
+    pattern = re.compile(r'^[a-zA-Z0-9]+[^a-zA-Z0-9]$')
+    if character in pattern:
+        return True
+    # return character in ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o",  "p",  "q",  "r",  "s",  "t",  "u",  "v",  "w",  "x",  "y",  "z",  "A",  "B",  "C",  "D",  "E",  "F",  "G",  "H",  "I",  "J",  "K",  "L",  "M",  "N",  "O",  "P",  "Q",  "R",  "S" , "T" , "U" , "V" , "W" , "X" , "Y" , "Z" , "0" , "1" , "2" , "3" , "4" , "5" , "6" , "7" , "8" , "9" , "!" , "@" , "#" , "$" , "%" , "^" , "*" , "(" , ")" , "-" , "_" , "=" , "+" , "`" , "~" , "," , "." , "/" , "?", "[" , "]" , "{" , "}" , "\"", "|", "", " "]
 
 # TODO
 def formatted_text(line):
@@ -197,7 +200,9 @@ def void_tag():
     return void_tag_array
 
 def container_tag(line):
-    # (v2)<container_tag> ::= "<"<formatted_text_tag>">" <formatted_text> "</"\1">" // "Regex to force the same tag for opening and closing."
+    """
+    (v2)<container_tag> ::= "<"<formatted_text_tag>">" <formatted_text> "</"\1">" // "Regex to force the same tag for opening and closing."
+    """
     # global line
     if re.search('<.*>', line) and not re.search('</.*>', line):
     # if text(lexeme) == "<" and not text(lexeme) == "</":
@@ -207,7 +212,9 @@ def container_tag(line):
 
 
 def formatted_text_tag():
+    """
     # <formatted_text_tag> ::= "code" | "b" | "strong" | "i" | "em" | "blockquote"
+    """
     tags = ["code", "b", "strong", "i", "em", "blockquote"]
     return tags
 
@@ -216,7 +223,7 @@ def open_file(file_input, file_output):
     Function to open a file
     """
     # global line
-    global index
+    # global index
 
     with open(file_input, 'r', encoding='UTF-8') as file_one:
         for index, line in enumerate(file_one):
