@@ -8,8 +8,6 @@ import webbrowser
 import os
 import re
 
-# list_of_lines = []
-
 # scanner
 # def validate_lexemes():
 #     global sentence
@@ -251,15 +249,23 @@ def open_file(file_input, file_output):
         list_of_lines = file_one.readlines()
     file_one.close()
 
+    # I believe that I need to reject all the stuff before <body> and after </body>
+
     for current in list_of_lines:
-        print(current)
+        
+        print(current, end=" ")
+        
         if re.search('<body.*>', current):
             print("FOUND!")
-            contain(current)
+            flag_start = current
+            # contain(current)
         if re.search('</body.*>', current):
             print("FOUND!")
-            convert(file_input, file_output)
-            break
+            flag_end = current
+            # convert(file_input, file_output)
+            # break
+    print("\n"+flag_start, end="")
+    print(flag_end, end="")
 
 def convert(file_input, file_output):
     """
