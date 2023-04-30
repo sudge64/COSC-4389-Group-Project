@@ -43,125 +43,126 @@ def valid_tag(tags):
 
 # Parser
 
-def contain():
+def contain(list_of_line):
     """
     <contain> ::= <cont><contain>
     """
 
-    cont()
-    contain()
+    cont(list_of_line)
+    contain(list_of_line)
 
-def cont():
+def cont(list_of_line):
     """
     <cont> ::= <title> | <para> | <table> | <list> | ∅
     """
-    title()
-    para()
-    table()
-    list_rule()
+    title(list_of_line)
+    para(list_of_line)
+    table(list_of_line)
+    list_rule(list_of_line)
 
-def title():
+def title(list_of_line):
     """
     <title> ::= "<h"<title_number>">" <formatted_text> "</h"<title_number>">"
     """
     # global line
-    if re.search(r'<h.*>', line):
+    if re.search(r'<h.*>', list_of_line):
         print("Here's <h.*>")
-        title_number()
-        formatted_text()
-        if re.search(r'</h.*>', line):
-            title_number()
+        title_number(list_of_line)
+        formatted_text(list_of_line)
+        if re.search(r'</h.*>', list_of_line):
+            title_number(list_of_line)
 
-def title_number():
+def title_number(list_of_line):
     """
     <title_number> ::= 1 | 2 | 3 | 4 | 5 | 6
     """
     # global line
-    if re.search('<h1.*>', line) or re.search('</h1.*>', line):
+    if re.search('<h1.*>', list_of_line) or re.search('</h1.*>', list_of_line):
         return "1"
-    if re.search('<h2.*>', line) or re.search('</h2.*>', line):
+    if re.search('<h2.*>', list_of_line) or re.search('</h2.*>', list_of_line):
         return "2"
-    if re.search('<h3.*>', line) or re.search('</h3.*>', line):
+    if re.search('<h3.*>', list_of_line) or re.search('</h3.*>', list_of_line):
         return "3"
-    if re.search('<h4.*>', line) or re.search('</h4.*>', line):
+    if re.search('<h4.*>', list_of_line) or re.search('</h4.*>', list_of_line):
         return "4"
-    if re.search('<h5.*>', line) or re.search('</h5.*>', line):
+    if re.search('<h5.*>', list_of_line) or re.search('</h5.*>', list_of_line):
         return "5"
-    if re.search('<h6.*>', line) or re.search('</h6.*>', line):
+    if re.search('<h6.*>', list_of_line) or re.search('</h6.*>', list_of_line):
         return "6"
 
-def para():
+def para(list_of_line):
     """
     <para> ::= "<p>"<text>"</p>" | "<p>"<formatted_text>"</p>"
     """
-    global lexeme
+    # global lexeme
     # global line
-    if re.search('<p.*>', line):
-        valid_tag(lexeme)
-        formatted_text()
+    if re.search('<p.*>', list_of_line):
+        # valid_tag(list_of_line)
+        valid_tag(list_of_line)
+        formatted_text(list_of_line)
 
-def table():
+def table(list_of_line):
     """
     <table> ::= "<table>"<table_row>"</table>"
     """
     # global line
-    if re.search('<table.*>', line):
-        table_row()
+    if re.search('<table.*>', list_of_line):
+        table_row(list_of_line)
 
-def table_row():
+def table_row(list_of_line):
     """
     <table_row> ::= "<tr>"<table_header>"</tr>" | "<tr>"<table_data>"</tr>"
     """
     # global line
-    if re.search('<tr.*>', line):
-        table_header()
+    if re.search('<tr.*>', list_of_line):
+        table_header(list_of_line)
 
-def table_header():
+def table_header(list_of_line):
     """
     <table_header> ::= "<th>"<formatted_text>"</th>" | ∅
     """
     # global line
-    if re.search('<th.*>', line):
-        formatted_text()
+    if re.search('<th.*>', list_of_line):
+        formatted_text(list_of_line)
 
-def table_data():
+def table_data(list_of_line):
     """
     <table_data> ::= "<td>"<formatted_text>"</td>" | ∅
     """
     # global line
-    if re.search('<td.*>', line):
-        formatted_text()
+    if re.search('<td.*>', list_of_line):
+        formatted_text(list_of_line)
 
-def list_rule():
+def list_rule(list_of_line):
     """
     (v2)<list> ::= <list_unordered> | <list_ordered> // "This might work with (v2)<list_item> below."
     """
     # global line
-    if re.search('<ul.*>', line):
-        list_unordered()
-    if re.search('<ol.*>', line):
-        list_ordered()
+    if re.search('<ul.*>', list_of_line):
+        list_unordered(list_of_line)
+    if re.search('<ol.*>', list_of_line):
+        list_ordered(list_of_line)
 
-def list_unordered():
+def list_unordered(list_of_line):
     """
     <list_unordered> ::= "<ul>"<list_item>"</ul>" // "This needs to be recursive"
     """
-    list_item()
+    list_item(list_of_line)
 
-def list_ordered():
+def list_ordered(list_of_line):
     """
     <list_ordered> ::= "<ol>"<list_item>"</ol>" // "This needs to be recursive"
     """
-    list_item()
+    list_item(list_of_line)
 
-def list_item():
+def list_item(list_of_line):
     """
     (v2)<list_item> ::= "<li>"<formatted_text>"</li>" | <list_item>"<li>"<formatted_text>"</li>" // "This might work"
     """
     # global line
-    if re.search('<li.*>', line):
-        list_item()
-        formatted_text()
+    if re.search('<li.*>', list_of_line):
+        list_item(list_of_line)
+        formatted_text(list_of_line)
 
 
 # valid_tag()?
@@ -177,41 +178,41 @@ def text(character):
     # return character in ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o",  "p",  "q",  "r",  "s",  "t",  "u",  "v",  "w",  "x",  "y",  "z",  "A",  "B",  "C",  "D",  "E",  "F",  "G",  "H",  "I",  "J",  "K",  "L",  "M",  "N",  "O",  "P",  "Q",  "R",  "S" , "T" , "U" , "V" , "W" , "X" , "Y" , "Z" , "0" , "1" , "2" , "3" , "4" , "5" , "6" , "7" , "8" , "9" , "!" , "@" , "#" , "$" , "%" , "^" , "*" , "(" , ")" , "-" , "_" , "=" , "+" , "`" , "~" , "," , "." , "/" , "?", "[" , "]" , "{" , "}" , "\"", "|", "", " "]
 
 # TODO
-def formatted_text():
+def formatted_text(list_of_line):
     """
     <formatted_text> ::= <text><tag><formatted_text> | <text> | ∅
     """
     # global line
-    if text():
-        tag()
-        formatted_text()
+    if text(list_of_line):
+        tag(list_of_line)
+        formatted_text(list_of_line)
 
-def tag():
+def tag(list_of_line):
     """
     <tag> ::= <void_tag> | <container_tag>
     """
     # global line
-    if re.search('<.*>', line) and not re.search('</.*>', line):
-        void_tag()
+    if re.search('<.*>', list_of_line) and not re.search('</.*>', list_of_line):
+        void_tag(list_of_line)
     else:
-        container_tag()
+        container_tag(list_of_line)
 
-def void_tag():
+def void_tag(list_of_line):
     """
     <void_tag> ::= "<area>" | "<base>" | "<br>" | "<col>" | "<embed>" | "<hr>" | "<img>" | "<input>" | "<keygen>" | "<link>" | "<meta>" | "<param>" | "<source>" | "<track>" | "<wbr>"
     """
     void_tag_array = ["<area>", "<base>", "<br>", "<col>", "<embed>", "<hr>", "<img>", "<input>", "<keygen>", "<link>", "<meta>", "<param>", "<source>", "<track>", "<wbr>"]
     return void_tag_array
 
-def container_tag():
+def container_tag(list_of_line):
     """
     (v2)<container_tag> ::= "<"<formatted_text_tag>">" <formatted_text> "</"\1">" // "Regex to force the same tag for opening and closing."
     """
     # global line
-    if re.search('<.*>', line) and not re.search('</.*>', line):
+    if re.search('<.*>', list_of_line) and not re.search('</.*>', list_of_line):
     # if text(lexeme) == "<" and not text(lexeme) == "</":
         formatted_text_tag()
-        formatted_text()
+        formatted_text(list_of_line)
         # closing tag
 
 
@@ -237,7 +238,13 @@ def open_file(file_input, file_output):
             #    print("FOUND!")
             #    contain()
     file_one.close()
-    contain()
+    for list_of_line in list_of_lines:
+        if re.search('<body.*>', list_of_line):
+            print("FOUND!")
+            contain(list_of_line)
+        if re.search('</body.*>', list_of_line):
+            print("FOUND!")
+            break
 
 def convert(file_input, file_output):
     """
