@@ -250,22 +250,24 @@ def open_file(file_input, file_output):
     file_one.close()
 
     # I believe that I need to reject all the stuff before <body> and after </body>
-
+    i = 0
     for current in list_of_lines:
         
         print(current, end=" ")
         
         if re.search('<body.*>', current):
             print("FOUND!")
-            flag_start = current
+            flag_start = i
             # contain(current)
         if re.search('</body.*>', current):
             print("FOUND!")
-            flag_end = current
+            flag_end = i
             # convert(file_input, file_output)
             # break
-    print("\n"+flag_start, end="")
-    print(flag_end, end="")
+        i += 1
+    print("\n")
+    print(flag_start)
+    print(flag_end)
 
 def convert(file_input, file_output):
     """
