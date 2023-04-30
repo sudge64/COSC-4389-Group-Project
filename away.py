@@ -323,7 +323,7 @@ def read_command_line_args(argv):
     print('Input file is', input_file)
     print('Output file is', output_file)
     # convert(input_file, output_file)
-    open_file(input_file, output_file)
+    open_file(input_file)
 
 def main(argv):
     """
