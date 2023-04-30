@@ -60,11 +60,11 @@ def cont(current):
     """
     if re.search('<h.*>', current):
         title(current)
-    if re.search('<p.*>', current):
+    elif re.search('<p.*>', current):
         para(current)
-    if re.search('<table.*>', current):
+    elif re.search('<table.*>', current):
         table(current)
-    if re.search('<tr.*>', current):
+    elif re.search('<tr.*>', current):
         list_rule(current)
 
 def title(current):
@@ -86,15 +86,15 @@ def title_number(current):
     # global line
     if re.search('<h1.*>', current) or re.search('</h1.*>', current):
         return "1"
-    if re.search('<h2.*>', current) or re.search('</h2.*>', current):
+    elif re.search('<h2.*>', current) or re.search('</h2.*>', current):
         return "2"
-    if re.search('<h3.*>', current) or re.search('</h3.*>', current):
+    elif re.search('<h3.*>', current) or re.search('</h3.*>', current):
         return "3"
-    if re.search('<h4.*>', current) or re.search('</h4.*>', current):
+    elif re.search('<h4.*>', current) or re.search('</h4.*>', current):
         return "4"
-    if re.search('<h5.*>', current) or re.search('</h5.*>', current):
+    elif re.search('<h5.*>', current) or re.search('</h5.*>', current):
         return "5"
-    if re.search('<h6.*>', current) or re.search('</h6.*>', current):
+    elif re.search('<h6.*>', current) or re.search('</h6.*>', current):
         return "6"
 
 def para(current):
@@ -252,8 +252,8 @@ def open_file(file_input, file_output):
     # I believe that I need to reject all the stuff before <body> and after </body>
     i = 0
     for current in list_of_lines:
-        
-        print(current, end=" ")
+        print("Line {}: {}".format(i, current), end="")
+        # print(current, end=" ")
         
         if re.search('<body.*>', current):
             print("FOUND!")
@@ -268,6 +268,9 @@ def open_file(file_input, file_output):
     print("\n")
     print(flag_start)
     print(flag_end)
+
+    for x in range(flag_start,flag_end):
+        contain(list_of_lines[x])
 
 def convert(file_input, file_output):
     """
