@@ -8,7 +8,7 @@ import webbrowser
 import os
 import re
 
-list_of_lines = []
+# list_of_lines = []
 
 # scanner
 # def validate_lexemes():
@@ -18,14 +18,20 @@ list_of_lines = []
 #             return False
 #     return True
 
-def validate_tags():
+def validate_tags(list_of_line):
+    """
+    Function to validate tags
+    """
     # global line
-    for tags in line:
+    for tags in list_of_line:
         if not valid_tag(tags):
             return False
     return True
 
 def valid_tag(tags):
+    """
+    Function to hold valid HTML tags.
+    """
     return tags in ["h", "p", "table", "tr", "th", "td", "ul", "ol", "li"]
 
 # def getNextLexeme():
@@ -65,11 +71,11 @@ def title(list_of_line):
     <title> ::= "<h"<title_number>">" <formatted_text> "</h"<title_number>">"
     """
     # global line
-    if re.search(r'<h.*>', list_of_line):
+    if re.search('<h.*>', list_of_line):
         print("Here's <h.*>")
         title_number(list_of_line)
         formatted_text(list_of_line)
-        if re.search(r'</h.*>', list_of_line):
+        if re.search('</h.*>', list_of_line):
             title_number(list_of_line)
 
 def title_number(list_of_line):
@@ -164,11 +170,10 @@ def list_item(list_of_line):
         list_item(list_of_line)
         formatted_text(list_of_line)
 
-
 # valid_tag()?
 def text(character):
     """
-    <text> ::=  a | b | c | d | e | f | g | h | i | j | k | l | m | n | o | p | q | r | s | t | u | v | w | x | y | z | A | B | C | D | E | F | G | H | I | J | K | L | M | N | O | P | Q | R | S | T | U | V | W | X | Y | Z | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | ! | @ | # | $ | % | ^ | * | ( | ) | - | _ | = | + | ` | ~ | , | . | / | ? [ | ] | { | } | \ | "|"
+    <text> ::=  a | b | c | d | e | f | g | h | i | j | k | l | m | n | o | p | q | r | s | t | u | v | w | x | y | z | A | B | C | D | E | F | G | H | I | J | K | L | M | N | O | P | Q | R | S | T | U | V | W | X | Y | Z | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | ! | @ | # | $ | % | ^ | * | ( | ) | - | _ | = | + | ` | ~ | , | . | / | ? [ | ] | { | } | \\ | "|"
     """
     pattern = re.compile(r'^[a-zA-Z0-9]+[^a-zA-Z0-9]$')
     if character in pattern:
@@ -193,11 +198,11 @@ def tag(list_of_line):
     """
     # global line
     if re.search('<.*>', list_of_line) and not re.search('</.*>', list_of_line):
-        void_tag(list_of_line)
+        void_tag()
     else:
         container_tag(list_of_line)
 
-def void_tag(list_of_line):
+def void_tag():
     """
     <void_tag> ::= "<area>" | "<base>" | "<br>" | "<col>" | "<embed>" | "<hr>" | "<img>" | "<input>" | "<keygen>" | "<link>" | "<meta>" | "<param>" | "<source>" | "<track>" | "<wbr>"
     """
@@ -230,20 +235,27 @@ def open_file(file_input, file_output):
     # global line
     # global index
 
-    with open(file_input, 'r', encoding='UTF-8') as file_one:
-        for index, line in enumerate(file_one):
-            print("Line {}: {}".format(index, line.strip()))
-            list_of_lines.append(line)
+    # with open(file_input, 'r', encoding='UTF-8') as file_one:
+    #     for index, line in enumerate(file_one):
+    #         print("Line {}: {}".format(index, line.strip()))
+    #         list_of_lines.append(line)
             # if re.search('<body.*>', line):
             #    print("FOUND!")
             #    contain()
+    # file_one.close()
+
+    with open(file_input, 'r', encoding='UTF-8') as file_one:
+        list_of_lines = file_one.readlines()
     file_one.close()
-    for list_of_line in list_of_lines:
-        if re.search('<body.*>', list_of_line):
+
+    for iterator in list_of_lines:
+        print(iterator)
+        if re.search('<body.*>', iterator):
             print("FOUND!")
-            contain(list_of_line)
-        if re.search('</body.*>', list_of_line):
+            contain(iterator)
+        if re.search('</body.*>', iterator):
             print("FOUND!")
+            convert(file_input, file_output)
             break
 
 def convert(file_input, file_output):
