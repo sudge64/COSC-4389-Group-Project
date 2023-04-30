@@ -59,7 +59,7 @@ def cont(current):
     <cont> ::= <title> | <para> | <table> | <list> | ∅
     """
     if re.search('<h+[1-6].*>', current):
-        print("FOUND! {}".format(current), end="")
+        print("FOUND! {current}", end="")
         title(current)
     elif re.search('<p.*>', current):
         para(current)
@@ -255,9 +255,9 @@ def open_file(file_input):
     # I believe that I need to reject all the stuff before <body> and after </body>
     i = 0
     for current in list_of_lines:
-        print("Line {}: {}".format(i, current), end="")
+        print("Line {i}: {current}", end="")
         # print(current, end=" ")
-        
+
         if re.search('<body.*>', current):
             print("FOUND!")
             flag_start = i
