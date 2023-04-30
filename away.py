@@ -49,126 +49,129 @@ def valid_tag(tags):
 
 # Parser
 
-def contain(list_of_line):
+def contain(current):
     """
     <contain> ::= <cont><contain>
     """
+    cont(current)
+    contain(current)
 
-    cont(list_of_line)
-    contain(list_of_line)
-
-def cont(list_of_line):
+def cont(current):
     """
     <cont> ::= <title> | <para> | <table> | <list> | ∅
     """
-    title(list_of_line)
-    para(list_of_line)
-    table(list_of_line)
-    list_rule(list_of_line)
+    if re.search('<h.*>', current):
+        title(current)
+    if re.search('<p.*>', current):
+        para(current)
+    if re.search('<table.*>', current):
+        table(current)
+    if re.search('<tr.*>', current):
+        list_rule(current)
 
-def title(list_of_line):
+def title(current):
     """
     <title> ::= "<h"<title_number>">" <formatted_text> "</h"<title_number>">"
     """
     # global line
-    if re.search('<h.*>', list_of_line):
+    if re.search('<h.*>', current):
         print("Here's <h.*>")
-        title_number(list_of_line)
-        formatted_text(list_of_line)
-        if re.search('</h.*>', list_of_line):
-            title_number(list_of_line)
+        title_number(current)
+        formatted_text(current)
+        if re.search('</h.*>', current):
+            title_number(current)
 
-def title_number(list_of_line):
+def title_number(current):
     """
     <title_number> ::= 1 | 2 | 3 | 4 | 5 | 6
     """
     # global line
-    if re.search('<h1.*>', list_of_line) or re.search('</h1.*>', list_of_line):
+    if re.search('<h1.*>', current) or re.search('</h1.*>', current):
         return "1"
-    if re.search('<h2.*>', list_of_line) or re.search('</h2.*>', list_of_line):
+    if re.search('<h2.*>', current) or re.search('</h2.*>', current):
         return "2"
-    if re.search('<h3.*>', list_of_line) or re.search('</h3.*>', list_of_line):
+    if re.search('<h3.*>', current) or re.search('</h3.*>', current):
         return "3"
-    if re.search('<h4.*>', list_of_line) or re.search('</h4.*>', list_of_line):
+    if re.search('<h4.*>', current) or re.search('</h4.*>', current):
         return "4"
-    if re.search('<h5.*>', list_of_line) or re.search('</h5.*>', list_of_line):
+    if re.search('<h5.*>', current) or re.search('</h5.*>', current):
         return "5"
-    if re.search('<h6.*>', list_of_line) or re.search('</h6.*>', list_of_line):
+    if re.search('<h6.*>', current) or re.search('</h6.*>', current):
         return "6"
 
-def para(list_of_line):
+def para(current):
     """
     <para> ::= "<p>"<text>"</p>" | "<p>"<formatted_text>"</p>"
     """
     # global lexeme
     # global line
-    if re.search('<p.*>', list_of_line):
+    if re.search('<p.*>', current):
         # valid_tag(list_of_line)
-        valid_tag(list_of_line)
-        formatted_text(list_of_line)
+        valid_tag(current)
+        formatted_text(current)
 
-def table(list_of_line):
+def table(current):
     """
     <table> ::= "<table>"<table_row>"</table>"
     """
     # global line
-    if re.search('<table.*>', list_of_line):
-        table_row(list_of_line)
+    if re.search('<table.*>', current):
+        table_row(current)
 
-def table_row(list_of_line):
+def table_row(current):
     """
     <table_row> ::= "<tr>"<table_header>"</tr>" | "<tr>"<table_data>"</tr>"
     """
     # global line
-    if re.search('<tr.*>', list_of_line):
-        table_header(list_of_line)
+    if re.search('<tr.*>', current):
+        table_header(current)
 
-def table_header(list_of_line):
+def table_header(current):
     """
     <table_header> ::= "<th>"<formatted_text>"</th>" | ∅
     """
     # global line
-    if re.search('<th.*>', list_of_line):
-        formatted_text(list_of_line)
+    if re.search('<th.*>', current):
+        formatted_text(current)
 
-def table_data(list_of_line):
+def table_data(current):
     """
     <table_data> ::= "<td>"<formatted_text>"</td>" | ∅
     """
     # global line
-    if re.search('<td.*>', list_of_line):
-        formatted_text(list_of_line)
+    if re.search('<td.*>', current):
+        formatted_text(current)
 
-def list_rule(list_of_line):
+def list_rule(current):
     """
     (v2)<list> ::= <list_unordered> | <list_ordered> // "This might work with (v2)<list_item> below."
     """
     # global line
-    if re.search('<ul.*>', list_of_line):
-        list_unordered(list_of_line)
-    if re.search('<ol.*>', list_of_line):
-        list_ordered(list_of_line)
+    if re.search('<ul.*>', current):
+        list_unordered(current)
+    if re.search('<ol.*>', current):
+        list_ordered(current)
 
-def list_unordered(list_of_line):
+def list_unordered(current):
     """
     <list_unordered> ::= "<ul>"<list_item>"</ul>" // "This needs to be recursive"
     """
-    list_item(list_of_line)
+    list_item(current)
 
-def list_ordered(list_of_line):
+def list_ordered(current):
     """
     <list_ordered> ::= "<ol>"<list_item>"</ol>" // "This needs to be recursive"
     """
-    list_item(list_of_line)
+    list_item(current)
 
-def list_item(list_of_line):
+def list_item(current):
     """
     (v2)<list_item> ::= "<li>"<formatted_text>"</li>" | <list_item>"<li>"<formatted_text>"</li>" // "This might work"
     """
     # global line
-    if re.search('<li.*>', list_of_line):
-        list_item(list_of_line)
-        formatted_text(list_of_line)
+    if re.search('<li.*>', current):
+        list_item(current)
+        formatted_text(current)
 
 # valid_tag()?
 def text(character):
@@ -183,24 +186,24 @@ def text(character):
     # return character in ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o",  "p",  "q",  "r",  "s",  "t",  "u",  "v",  "w",  "x",  "y",  "z",  "A",  "B",  "C",  "D",  "E",  "F",  "G",  "H",  "I",  "J",  "K",  "L",  "M",  "N",  "O",  "P",  "Q",  "R",  "S" , "T" , "U" , "V" , "W" , "X" , "Y" , "Z" , "0" , "1" , "2" , "3" , "4" , "5" , "6" , "7" , "8" , "9" , "!" , "@" , "#" , "$" , "%" , "^" , "*" , "(" , ")" , "-" , "_" , "=" , "+" , "`" , "~" , "," , "." , "/" , "?", "[" , "]" , "{" , "}" , "\"", "|", "", " "]
 
 # TODO
-def formatted_text(list_of_line):
+def formatted_text(current):
     """
     <formatted_text> ::= <text><tag><formatted_text> | <text> | ∅
     """
     # global line
-    if text(list_of_line):
-        tag(list_of_line)
-        formatted_text(list_of_line)
+    if text(current):
+        tag(current)
+        formatted_text(current)
 
-def tag(list_of_line):
+def tag(current):
     """
     <tag> ::= <void_tag> | <container_tag>
     """
     # global line
-    if re.search('<.*>', list_of_line) and not re.search('</.*>', list_of_line):
+    if re.search('<.*>', current) and not re.search('</.*>', current):
         void_tag()
     else:
-        container_tag(list_of_line)
+        container_tag(current)
 
 def void_tag():
     """
@@ -209,15 +212,15 @@ def void_tag():
     void_tag_array = ["<area>", "<base>", "<br>", "<col>", "<embed>", "<hr>", "<img>", "<input>", "<keygen>", "<link>", "<meta>", "<param>", "<source>", "<track>", "<wbr>"]
     return void_tag_array
 
-def container_tag(list_of_line):
+def container_tag(current):
     """
     (v2)<container_tag> ::= "<"<formatted_text_tag>">" <formatted_text> "</"\1">" // "Regex to force the same tag for opening and closing."
     """
     # global line
-    if re.search('<.*>', list_of_line) and not re.search('</.*>', list_of_line):
+    if re.search('<.*>', current) and not re.search('</.*>', current):
     # if text(lexeme) == "<" and not text(lexeme) == "</":
         formatted_text_tag()
-        formatted_text(list_of_line)
+        formatted_text(current)
         # closing tag
 
 
@@ -248,12 +251,12 @@ def open_file(file_input, file_output):
         list_of_lines = file_one.readlines()
     file_one.close()
 
-    for iterator in list_of_lines:
-        print(iterator)
-        if re.search('<body.*>', iterator):
+    for current in list_of_lines:
+        print(current)
+        if re.search('<body.*>', current):
             print("FOUND!")
-            contain(iterator)
-        if re.search('</body.*>', iterator):
+            contain(current)
+        if re.search('</body.*>', current):
             print("FOUND!")
             convert(file_input, file_output)
             break
