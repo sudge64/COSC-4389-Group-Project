@@ -102,7 +102,6 @@ def table(line):
     """
     <table> ::= "<table>"<table_row>"</table>"
     """
-    global lexeme
     # global line
     if re.search('<table.*>', line):
         table_row(line)
@@ -111,7 +110,6 @@ def table_row(line):
     """
     <table_row> ::= "<tr>"<table_header>"</tr>" | "<tr>"<table_data>"</tr>"
     """
-    global lexeme
     # global line
     if re.search('<tr.*>', line):
         table_header(line)
@@ -176,9 +174,8 @@ def formatted_text(line):
     """
     <formatted_text> ::= <text><tag><formatted_text> | <text> | ∅
     """
-    global lexeme
     # global line
-    if text(lexeme):
+    if text(line):
         tag(line)
         formatted_text(line)
 
