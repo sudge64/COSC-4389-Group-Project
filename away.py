@@ -77,8 +77,7 @@ def para(current):
     """
     <para> ::= "<p>"<text>"</p>" | "<p>"<formatted_text>"</p>"
     """
-    # global lexeme
-    # global line
+
     if re.search('<p.*>', current):
         formatted_text(current)
 
@@ -86,7 +85,7 @@ def table(current):
     """
     <table> ::= "<table>"<table_row>"</table>"
     """
-    # global line
+
     if re.search('<table.*>', current):
         table_row(current)
 
@@ -94,7 +93,7 @@ def table_row(current):
     """
     <table_row> ::= "<tr>"<table_header>"</tr>" | "<tr>"<table_data>"</tr>"
     """
-    # global line
+
     if re.search('<tr.*>', current):
         table_header(current)
 
@@ -102,7 +101,7 @@ def table_header(current):
     """
     <table_header> ::= "<th>"<formatted_text>"</th>" | ∅
     """
-    # global line
+
     if re.search('<th.*>', current):
         formatted_text(current)
     else:
@@ -112,7 +111,7 @@ def table_data(current):
     """
     <table_data> ::= "<td>"<formatted_text>"</td>" | ∅
     """
-    # global line
+
     if re.search('<td.*>', current):
         formatted_text(current)
     else:
@@ -122,7 +121,7 @@ def list_rule(current):
     """
     (v2)<list> ::= <list_unordered> | <list_ordered> // "This might work with (v2)<list_item> below."
     """
-    # global line
+
     if re.search('<ul.*>', current):
         list_unordered(current)
     if re.search('<ol.*>', current):
@@ -144,7 +143,7 @@ def list_item(current):
     """
     (v2)<list_item> ::= "<li>"<formatted_text>"</li>" | <list_item>"<li>"<formatted_text>"</li>" // "This might work"
     """
-    # global line
+
     if re.search('<li.*>', current):
         list_item(current)
         formatted_text(current)
@@ -164,7 +163,7 @@ def formatted_text(current):
     """
     <formatted_text> ::= <text><tag><formatted_text> | <text> | ∅
     """
-    # global line
+
     if text(current) and re.search('<.*>', current):
         tag(current)
         formatted_text(current)
@@ -177,7 +176,7 @@ def tag(current):
     """
     <tag> ::= <void_tag> | <container_tag>
     """
-    # global line
+
     if re.search('<.*>', current) and not re.search('</.*>', current):
         void_tag()
     else:
@@ -269,12 +268,10 @@ def read_command_line_args(argv):
             output_file = arg
         elif opt in "-b":
             extension = ".html"
-            # if extension in input_file or extension in output_file:
             if extension in output_file:
                 with open('index.html', 'r', encoding='UTF-8') as index:
                     html = index.read()
 
-                # path = os.path.abspath(output_file+'.html')
                 path = os.path.abspath(output_file)
                 url = 'file://' + path
 
