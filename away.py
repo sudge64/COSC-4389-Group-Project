@@ -19,7 +19,6 @@ def cont(current):
     """
     <cont> ::= <title> | <para> | <table> | <list> | ∅
     """
-   
     if re.search('<h+[1-6].*>', current):
         print("FOUND! {current}", end="")
         title(current)
@@ -36,7 +35,6 @@ def title(current):
     """
     <title> ::= "<h1>" <formattedText> "</h1>" | "<h2>" <formattedText> "</h2>" | "<h3>" <formattedText> "</h3>" | "<h4>" <formattedText> "</h4>" | "<h5>" <formattedText> "</h5>" | "<h6>" <formattedText> "</h6>"
     """
-
     if re.search('<h1.*>', current):
         print("Here's <h1.*>")
         formatted_text(current)
@@ -77,7 +75,6 @@ def para(current):
     """
     <para> ::= "<p>"<text>"</p>" | "<p>"<formatted_text>"</p>"
     """
-
     if re.search('<p.*>', current):
         formatted_text(current)
 
@@ -85,7 +82,6 @@ def table(current):
     """
     <table> ::= "<table>"<table_row>"</table>"
     """
-
     if re.search('<table.*>', current):
         table_row(current)
 
@@ -93,7 +89,6 @@ def table_row(current):
     """
     <table_row> ::= "<tr>"<table_header>"</tr>" | "<tr>"<table_data>"</tr>"
     """
-
     if re.search('<tr.*>', current):
         table_header(current)
 
@@ -101,7 +96,6 @@ def table_header(current):
     """
     <table_header> ::= "<th>"<formatted_text>"</th>" | ∅
     """
-
     if re.search('<th.*>', current):
         formatted_text(current)
     else:
@@ -111,7 +105,6 @@ def table_data(current):
     """
     <table_data> ::= "<td>"<formatted_text>"</td>" | ∅
     """
-
     if re.search('<td.*>', current):
         formatted_text(current)
     else:
@@ -121,7 +114,6 @@ def list_rule(current):
     """
     (v2)<list> ::= <list_unordered> | <list_ordered> // "This might work with (v2)<list_item> below."
     """
-
     if re.search('<ul.*>', current):
         list_unordered(current)
     if re.search('<ol.*>', current):
@@ -143,7 +135,6 @@ def list_item(current):
     """
     (v2)<list_item> ::= "<li>"<formatted_text>"</li>" | <list_item>"<li>"<formatted_text>"</li>" // "This might work"
     """
-
     if re.search('<li.*>', current):
         list_item(current)
         formatted_text(current)
