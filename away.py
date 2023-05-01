@@ -190,8 +190,8 @@ def void_tag():
     | "<param>" | "<source>" | "<track>" | "<wbr>"
     """
     void_tag_array = ["<area>", "<base>", "<br>", "<col>", "<embed>", "<hr>",
-    "<img>", "<input>", "<keygen>", "<link>", 
-    "<meta>", "<param>", "<source>", "<track>", "<wbr>"]
+    "<img>", "<input>", "<keygen>", "<link>", "<meta>",
+    "<param>", "<source>", "<track>", "<wbr>"]
     return void_tag_array
 
 def container_tag(current):
