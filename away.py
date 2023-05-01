@@ -149,7 +149,6 @@ def text(character):
     else:
         return False
 
-
 def formatted_text(current):
     """
     <formatted_text> ::= <text><tag><formatted_text> | <text> | ∅
@@ -189,7 +188,6 @@ def container_tag(current):
         formatted_text_tag()
         formatted_text(current)
         # closing tag
-
 
 def formatted_text_tag():
     """
@@ -240,7 +238,6 @@ def convert(file_input, file_output):
                 file_two.write(line)
         file_one.close()
         file_two.close()
-
 
 def read_command_line_args(argv):
     """
