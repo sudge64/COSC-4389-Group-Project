@@ -207,7 +207,7 @@ def open_file(file_input):
         list_of_lines = file_one.readlines()
     file_one.close()
 
-    # I believe that I need to reject all the stuff before <body> and after </body>
+    # Need to only consider the HTML between <body> and </body>
     i = 0
     for current in list_of_lines:
         print("Line {i}: {current}", end="")
