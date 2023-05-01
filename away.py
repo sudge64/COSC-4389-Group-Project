@@ -19,6 +19,7 @@ def cont(current):
     """
     <cont> ::= <title> | <para> | <table> | <list> | ∅
     """
+    
     if re.search('<h+[1-6].*>', current):
         print("FOUND! {current}", end="")
         title(current)
