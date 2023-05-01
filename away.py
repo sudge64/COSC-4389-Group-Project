@@ -33,7 +33,12 @@ def cont(current):
 
 def title(current):
     """
-    <title> ::= "<h1>" <formattedText> "</h1>" | "<h2>" <formattedText> "</h2>" | "<h3>" <formattedText> "</h3>" | "<h4>" <formattedText> "</h4>" | "<h5>" <formattedText> "</h5>" | "<h6>" <formattedText> "</h6>"
+    <title> ::= "<h1>" <formattedText> "</h1>" 
+    | "<h2>" <formattedText> "</h2>" 
+    | "<h3>" <formattedText> "</h3>" 
+    | "<h4>" <formattedText> "</h4>" 
+    | "<h5>" <formattedText> "</h5>" 
+    | "<h6>" <formattedText> "</h6>"
     """
     if re.search('<h1.*>', current):
         print("Here's <h1.*>")
@@ -112,7 +117,7 @@ def table_data(current):
 
 def list_rule(current):
     """
-    (v2)<list> ::= <list_unordered> | <list_ordered> // "This might work with (v2)<list_item> below."
+    (v2)<list> ::= <list_unordered> | <list_ordered>
     """
     if re.search('<ul.*>', current):
         list_unordered(current)
@@ -121,19 +126,19 @@ def list_rule(current):
 
 def list_unordered(current):
     """
-    <list_unordered> ::= "<ul>"<list_item>"</ul>" // "This needs to be recursive"
+    <list_unordered> ::= "<ul>"<list_item>"</ul>"
     """
     list_item(current)
 
 def list_ordered(current):
     """
-    <list_ordered> ::= "<ol>"<list_item>"</ol>" // "This needs to be recursive"
+    <list_ordered> ::= "<ol>"<list_item>"</ol>"
     """
     list_item(current)
 
 def list_item(current):
     """
-    (v2)<list_item> ::= "<li>"<formatted_text>"</li>" | <list_item>"<li>"<formatted_text>"</li>" // "This might work"
+    (v2)<list_item> ::= "<li>"<formatted_text>"</li>" | <list_item>"<li>"<formatted_text>"</li>"
     """
     if re.search('<li.*>', current):
         list_item(current)
@@ -141,7 +146,13 @@ def list_item(current):
 
 def text(character):
     """
-    <text> ::=  a | b | c | d | e | f | g | h | i | j | k | l | m | n | o | p | q | r | s | t | u | v | w | x | y | z | A | B | C | D | E | F | G | H | I | J | K | L | M | N | O | P | Q | R | S | T | U | V | W | X | Y | Z | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | ! | @ | # | $ | % | ^ | * | ( | ) | - | _ | = | + | ` | ~ | , | . | / | ? [ | ] | { | } | \\ | "|"
+    <text> ::=  a | b | c | d | e | f | g | h | i | j | k | l | m 
+    | n | o | p | q | r | s | t | u | v | w | x | y | z 
+    | A | B | C | D | E | F | G | H | I | J | K | L | M 
+    | N | O | P | Q | R | S | T | U | V | W | X | Y | Z 
+    | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 
+    | ! | @ | # | $ | % | ^ | * | ( | ) | - | _ | = | + 
+    | ` | ~ | , | . | / | ? [ | ] | { | } | \\ | "|"
     """
     pattern = re.compile(r'^[a-zA-Z0-9]+[^a-zA-Z0-9]$')
     if character in pattern:
@@ -174,14 +185,18 @@ def tag(current):
 
 def void_tag():
     """
-    <void_tag> ::= "<area>" | "<base>" | "<br>" | "<col>" | "<embed>" | "<hr>" | "<img>" | "<input>" | "<keygen>" | "<link>" | "<meta>" | "<param>" | "<source>" | "<track>" | "<wbr>"
+    <void_tag> ::= "<area>" | "<base>" | "<br>" | "<col>" | "<embed>" | "<hr>" 
+    | "<img>" | "<input>" | "<keygen>" | "<link>" | "<meta>" 
+    | "<param>" | "<source>" | "<track>" | "<wbr>"
     """
-    void_tag_array = ["<area>", "<base>", "<br>", "<col>", "<embed>", "<hr>", "<img>", "<input>", "<keygen>", "<link>", "<meta>", "<param>", "<source>", "<track>", "<wbr>"]
+    void_tag_array = ["<area>", "<base>", "<br>", "<col>", "<embed>", "<hr>",
+    "<img>", "<input>", "<keygen>", "<link>", 
+    "<meta>", "<param>", "<source>", "<track>", "<wbr>"]
     return void_tag_array
 
 def container_tag(current):
     """
-    (v2)<container_tag> ::= "<"<formatted_text_tag>">" <formatted_text> "</"\1">" // "Regex to force the same tag for opening and closing."
+    (v2)<container_tag> ::= "<"<formatted_text_tag>">" <formatted_text> "</"\1">"
     """
 
     if re.search('<.*>', current) and not re.search('</.*>', current):
