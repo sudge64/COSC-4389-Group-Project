@@ -12,6 +12,9 @@ def contain(current):
     """
     <contain> ::= <cont><contain>
     """
+    if current == "":
+        return
+    print(F"Receiving {current}",end="")
     cont(current)
     contain(current)
 
@@ -19,17 +22,19 @@ def cont(current):
     """
     <cont> ::= <title> | <para> | <table> | <list> | ∅
     """
-    if re.search('<h+[1-6].*>', current):
-        print("FOUND! {current}", end="")
+    if re.search('<h[1-6].*>', current):
+        print(F"FOUND! {current}", end="")
         title(current)
     elif re.search('<p.*>', current):
         para(current)
     elif re.search('<table.*>', current):
         table(current)
-    elif re.search('<tr.*>', current):
+    elif re.search('<li.*>', current):
         list_rule(current)
     else:
-        print("Empty")
+        print(F"Empty cont {current}", end="")
+        return
+        
 
 def title(current):
     """
@@ -44,37 +49,41 @@ def title(current):
         print("Here's <h1.*>")
         formatted_text(current)
         if re.search('</h1.*>', current):
-            print("Heading end", end="")
+            print("Here's </h1.*>")
+            return
 
-    if re.search('<h2.*>', current):
+    elif re.search('<h2.*>', current):
         print("Here's <h2.*>")
         formatted_text(current)
         if re.search('</h2.*>', current):
             print("Heading end", end="")
 
-    if re.search('<h3.*>', current):
+    elif re.search('<h3.*>', current):
         print("Here's <h3.*>")
         formatted_text(current)
         if re.search('</h3.*>', current):
             print("Heading end", end="")
 
-    if re.search('<h4.*>', current):
+    elif re.search('<h4.*>', current):
         print("Here's <h4.*>")
         formatted_text(current)
         if re.search('</4.*>', current):
             print("Heading end", end="")
 
-    if re.search('<h5.*>', current):
+    elif re.search('<h5.*>', current):
         print("Here's <h5.*>")
         formatted_text(current)
         if re.search('</h5.*>', current):
             print("Heading end", end="")
 
-    if re.search('<h6.*>', current):
+    elif re.search('<h6.*>', current):
         print("Here's <h6.*>")
         formatted_text(current)
         if re.search('</h6.*>', current):
             print("Heading end", end="")
+    else:
+        print("title return")
+        return
 
 def para(current):
     """
@@ -104,7 +113,7 @@ def table_header(current):
     if re.search('<th.*>', current):
         formatted_text(current)
     else:
-        print("Empty")
+        print("Empty table_header()")
 
 def table_data(current):
     """
@@ -113,7 +122,7 @@ def table_data(current):
     if re.search('<td.*>', current):
         formatted_text(current)
     else:
-        print("Empty")
+        print("Empty table_data()")
 
 def list_rule(current):
     """
@@ -144,7 +153,7 @@ def list_item(current):
         list_item(current)
         formatted_text(current)
 
-def text(character):
+def text(current):
     """
     <text> ::=  a | b | c | d | e | f | g | h | i | j | k | l | m 
     | n | o | p | q | r | s | t | u | v | w | x | y | z 
@@ -154,10 +163,20 @@ def text(character):
     | ! | @ | # | $ | % | ^ | * | ( | ) | - | _ | = | + 
     | ` | ~ | , | . | / | ? [ | ] | { | } | \\ | "|"
     """
-    pattern = re.compile(r'^[a-zA-Z0-9]+[^a-zA-Z0-9]$')
-    if character in pattern:
+    pattern = ['a' , "b" , "c" , "d" , "e" , "f" , "g" , "h" , "i" , "j" , "k" , "l" , "m"
+    , "n" , "o" , "p" , "q" , "r" , "s" , "t" , "u" , "v" , "w" , "x" , "y" , "z"
+    , "A" , "B" , "C" , "D" , "E" , "F" , "G" , "H" , "I" , "J" , "K" , "L" , "M"
+    , "N" , "O" , "P" , "Q" , "R" , "S" , "T" , "U" , "V" , "W" , "X" , "Y" , "Z"
+    , "0" , "1" , "2" , "3" , "4" , "5" , "6" , "7" , "8" , "9"
+    , "!" , "@" , "#" , "$" , "%" , "^" , "*" , "(" , ")" , "-" , "_" , "=" , "+"
+    , "`" , "~" , "," , "." , "/" , "?", "[" , "]" , "{" , "}" , "\\" , "|"]
+    # if character in re.compile(r'^[a-zA-Z0-9]+[^a-zA-Z0-9]$'):
+
+    if current in pattern:
+        print("In IF TRUE")
         return True
     else:
+        print("In IF FALSE")
         return False
 
 def formatted_text(current):
@@ -165,13 +184,35 @@ def formatted_text(current):
     <formatted_text> ::= <text><tag><formatted_text> | <text> | ∅
     """
 
-    if text(current) and re.search('<.*>', current):
+    # if re.match(r'<h[1-6].*>', current):
+    if re.match(r'<[^/].*>', current):
+        # do something with header tags
+        print(F"OPENING TAG {current}")
         tag(current)
         formatted_text(current)
-    elif text(current):
-        text(current)
+    elif re.match(r'</.*>', current):
+        print(F"CLOSING TAG {current}")
+        return
+#    elif re.match(r'<.*?>', current):
+        # do something with other tags
+#        text(current)
     else:
-        print("Empty")
+        # handle regular text
+        print("Empty formatted_text()")
+        return
+
+
+
+    #if re.match(r'<h[1-6].*>', current):
+    #    print("Match!")
+    # if :
+    #if text(current) and re.search('<[^>]*>', current):
+    #    tag(current)
+    #    formatted_text(current)
+    #elif text(current):
+    #    text(current)
+    #else:
+    #    print("Empty formatted_text()")
 
 def tag(current):
     """
@@ -223,7 +264,7 @@ def open_file(file_input):
     # Need to only consider the HTML between <body> and </body>
     i = 0
     for current in list_of_lines:
-        print("Line {i}: {current}", end="")
+        print(F"Line {i}: {current}", end="")
         # print(current, end=" ")
 
         if re.search('<body.*>', current):
@@ -240,7 +281,8 @@ def open_file(file_input):
     print(flag_start)
     print(flag_end)
 
-    for index in range(flag_start,flag_end):
+    for index in range(flag_start+1,flag_end):
+        print(F"Sending {list_of_lines[index]}")
         contain(list_of_lines[index])
 
 def convert(file_input, file_output):
