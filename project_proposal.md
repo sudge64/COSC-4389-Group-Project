@@ -39,10 +39,7 @@ As **Away** is intended to be a CLI tool, it will be invoked as such. It will be
 <body>
 	<h1>Heading 1</h1>
 	<p>This is a test <br>paragraph.</p>
-	<ul>
-		<li>Item 1</li>
-		<li>Item 2</li>
-	</ul>
+	<ul><li>Item 1</li><li>Item 2</li></ul>
 </body>
 </html>
 ```

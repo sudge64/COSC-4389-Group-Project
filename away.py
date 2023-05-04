@@ -1,262 +1,216 @@
 """
-This program is for taking in a Markdown or HTML file,
-translating between the two, and outputing the results
+This program is for taking in a HTML file,
+converting it to Markdown, and outputing the results
 """
 import sys
 import getopt
-import webbrowser
-import os
 import re
 
-def contain(current):
+def content(string, index, flag_end):
     """
-    <contain> ::= <cont><contain>
+    <content> ::= <element><content> | <element> | ∅
     """
-    if current == "":
+    if re.match(r'^\s*$', string):
+        print("Empty")
         return
-    print(F"Receiving {current}",end="")
-    cont(current)
-    contain(current)
-
-def cont(current):
-    """
-    <cont> ::= <title> | <para> | <table> | <list> | ∅
-    """
-    if re.search('<h[1-6].*>', current):
-        print(F"FOUND! {current}", end="")
-        title(current)
-    elif re.search('<p.*>', current):
-        para(current)
-    elif re.search('<table.*>', current):
-        table(current)
-    elif re.search('<li.*>', current):
-        list_rule(current)
+    elif index == flag_end:
+        index += 1
+        markdown = element(string)
+        content(string, index, flag_end)
+        return markdown
     else:
-        print(F"Empty cont {current}", end="")
-        return
-        
+        index += 1
+        markdown = element(string)
+        return markdown
 
-def title(current):
+def element(string):
     """
-    <title> ::= "<h1>" <formattedText> "</h1>" 
-    | "<h2>" <formattedText> "</h2>" 
-    | "<h3>" <formattedText> "</h3>" 
-    | "<h4>" <formattedText> "</h4>" 
-    | "<h5>" <formattedText> "</h5>" 
+    <element> ::= <heading> | <paragraph> | <list>
+    """
+    if re.match(r".*<h[1-6][^>]*>.*<\/h[1-6]>", string):
+        # This regex tests for HTML `header` tags
+        return heading(string)
+    elif re.match(r'.*<p[^>]*>.*<\/p>', string):
+        # This regex tests for HTML `paragraph` tags
+        return paragraph(string)
+    elif re.match(r'.*<ul[^>]*>.*', string) or re.match(r'.*<ol[^>]*>.*', string):
+        # This regex tests for HTML `li` tags
+        return list_html(string)
+
+def heading(string):
+    """
+    <heading> ::= "<h1>" <formattedText> "</h1>"
+    | "<h2>" <formattedText> "</h2>"
+    | "<h3>" <formattedText> "</h3>"
+    | "<h4>" <formattedText> "</h4>"
+    | "<h5>" <formattedText> "</h5>"
     | "<h6>" <formattedText> "</h6>"
     """
-    if re.search('<h1.*>', current):
-        print("Here's <h1.*>")
-        formatted_text(current)
-        if re.search('</h1.*>', current):
-            print("Here's </h1.*>")
-            return
-
-    elif re.search('<h2.*>', current):
-        print("Here's <h2.*>")
-        formatted_text(current)
-        if re.search('</h2.*>', current):
-            print("Heading end", end="")
-
-    elif re.search('<h3.*>', current):
-        print("Here's <h3.*>")
-        formatted_text(current)
-        if re.search('</h3.*>', current):
-            print("Heading end", end="")
-
-    elif re.search('<h4.*>', current):
-        print("Here's <h4.*>")
-        formatted_text(current)
-        if re.search('</4.*>', current):
-            print("Heading end", end="")
-
-    elif re.search('<h5.*>', current):
-        print("Here's <h5.*>")
-        formatted_text(current)
-        if re.search('</h5.*>', current):
-            print("Heading end", end="")
-
-    elif re.search('<h6.*>', current):
-        print("Here's <h6.*>")
-        formatted_text(current)
-        if re.search('</h6.*>', current):
-            print("Heading end", end="")
+    clean_string = formatted_text(string)
+    print(F"clean_string : {clean_string}")
+    if re.match(r'.*<h1[^>]*>', string):
+        # This regex tests for HTML `<h1>` tags
+        clean_string = "# " + clean_string
+        print(clean_string)
+        return clean_string
+    elif re.match(r'.*<h2[^>]*>', string):
+        # This regex tests for HTML `<h2>` tags
+        clean_string = "## " + clean_string
+        print(clean_string)
+        return clean_string
+    elif re.match(r'.*<h3[^>]*>', string):
+        # This regex tests for HTML `<h3>` tags
+        clean_string = "### " + clean_string
+        print(clean_string)
+        return clean_string
+    elif re.match(r'.*<h4[^>]*>', string):
+        # This regex tests for HTML `<h4>` tags
+        clean_string = "#### " + clean_string
+        print(clean_string)
+        return clean_string
+    elif re.match(r'.*<h5[^>]*>', string):
+        # This regex tests for HTML `<h5>` tags
+        clean_string = "##### " + clean_string
+        print(clean_string)
+        return clean_string
+    elif re.match(r'.*<h6[^>]*>', string):
+        # This regex tests for HTML `<h6>` tags
+        clean_string = "###### " + clean_string
+        print(clean_string)
+        return clean_string
     else:
-        print("title return")
         return
 
-def para(current):
+def paragraph(string):
     """
-    <para> ::= "<p>"<text>"</p>" | "<p>"<formatted_text>"</p>"
+    <paragraph> ::= "<p>" <formattedText> "</p>"
     """
-    if re.search('<p.*>', current):
-        formatted_text(current)
+    clean_string = formatted_text(string)
+    print(F"paragraph clean_string : {clean_string}")
+    return clean_string
 
-def table(current):
+def list_html(string):
     """
-    <table> ::= "<table>"<table_row>"</table>"
+    <list> ::= <unorderedList> | <orderedList>
     """
-    if re.search('<table.*>', current):
-        table_row(current)
+    if re.match(r'.*<ul[^>]*>.*', string):
+        return list_unordered(string)
+    elif re.match(r'.*<ol[^>]*>.*', string):
+        return list_ordered(string)
 
-def table_row(current):
+def list_unordered(string):
     """
-    <table_row> ::= "<tr>"<table_header>"</tr>" | "<tr>"<table_data>"</tr>"
+    <unorderedList> ::= "<ul>" (<listItem>)* "</ul>"
     """
-    if re.search('<tr.*>', current):
-        table_header(current)
+    replace = "* "
+    list_items = list_item(string, replace)
+    for match in list_items:
+        print(F"match : {match}")
+    return ''.join([item + "\n" for item in list_items])
 
-def table_header(current):
+
+def list_ordered(string):
     """
-    <table_header> ::= "<th>"<formatted_text>"</th>" | ∅
+    <orderedList> ::= "<ol>" (<listItem>)* "</ol>"
     """
-    if re.search('<th.*>', current):
-        formatted_text(current)
+    replace = "1. "
+    list_items = list_item(string, replace)
+    for i, match in enumerate(list_items, start=1):
+        list_items[i-1] = f"\n{i}. {match[3:]}"
+        # add the number and remove the opening <li> tag
+        print(F"list_items : {list_items}")
+    return ''.join([item + "\n" for item in list_items])
+
+def list_item(string, replace):
+    """
+    <listItem> ::= "<li>" <formattedText> "</li>"
+    """
+    regex_list_item = re.compile(r'<li>(.*?)<\/li>')
+    list_items = regex_list_item.findall(string)
+    result_list_items = []
+    for item in list_items:
+        # This regex finds `<li>` tags
+        clean_string = formatted_text(item)
+        item_string = replace + clean_string
+        result_list_items.append(item_string)
+        print(F"item_string : {item_string}")
+    return result_list_items
+
+def formatted_text(string):
+    """
+    <formattedText> ::= <text> (<voidTag> | <containerTag>)*
+    """
+    void = r"<(?:area|base|br|col|embed|hr|img|input|keygen|link|meta|param|source|track|wbr)\s*/?>"
+    if re.match(void, string):
+        return void_tag(string)
+    elif re.match(r"<(\w+)[^>]*>(.*?)<\/\1>", string):
+        # This regex is to test if the opening and closing tags match
+        return text(string)
     else:
-        print("Empty table_header()")
+        return container_tag(string)
 
-def table_data(current):
+def void_tag(string):
     """
-    <table_data> ::= "<td>"<formatted_text>"</td>" | ∅
+    <voidTag> ::= "<area>" | "<base>" | "<br>"
+    | "<col>" | "<embed>" | "<hr>"
+    | "<img>" | "<input>"| "<keygen>"
+    | "<link>" | "<meta>" | "<param>"
+    | "<source>" | "<track>" | "<wbr>"
     """
-    if re.search('<td.*>', current):
-        formatted_text(current)
+    clean_string = clean_up(string)
+    return clean_string
+
+def container_tag(string):
+    """
+    <containerTag> ::= "<" ("code" | "b" | "strong" | "i" | "em" | "blockquote") ">" <formattedText>
+    "</" ("code" | "b" | "strong" | "i" | "em" | "blockquote") ">"
+    """
+    while re.search(r'<(code|b|strong|i|em|blockquote)[^>]*>(.*?)<\/\1>', string):
+        match = re.search(r'<(code|b|strong|i|em|blockquote)[^>]*>(.*?)<\/\1>', string)
+        tag = match.group(1)
+        holder = match.group(2)
+        clean_holder = clean_up(holder)
+        if tag == 'code':
+            replacement = f"`{clean_holder}`"
+        elif tag in ['b', 'strong']:
+            replacement = f"**{clean_holder}**"
+        elif tag in ['i', 'em']:
+            replacement = f"*{clean_holder}*"
+        elif tag == 'blockquote':
+            replacement = f"\n> {clean_holder}\n"
+        string = string[:match.start()] + replacement + string[match.end():]
+    return clean_up(string)
+
+def text(string):
+    r"""
+    <text> ::= [a-zA-Z0-9!@#$%^*()\-_=+`~,.\/?[\]{}\\|"\s]+
+    """
+    if re.match(r'^[A-Za-z0-9\s\,\.\?\`\~\!\@\#\$\%\^\&\*\(\)\-\_\=\+\|].*$', string):
+        # This regex tests for upper- and lower-case letters, numbers, and special characters
+        return clean_up(string)
+    elif re.match(r'<!--.*?', string) or re.match(r'.*?-->', string):
+        # This regex checks for HTML comments
+        return None
     else:
-        print("Empty table_data()")
+        print("ERROR: String does not match text regex")
+        return None
 
-def list_rule(current):
+def clean_up(string):
     """
-    (v2)<list> ::= <list_unordered> | <list_ordered>
+    Function to strip HTML tags and formatting whitespace from a string
     """
-    if re.search('<ul.*>', current):
-        list_unordered(current)
-    if re.search('<ol.*>', current):
-        list_ordered(current)
-
-def list_unordered(current):
-    """
-    <list_unordered> ::= "<ul>"<list_item>"</ul>"
-    """
-    list_item(current)
-
-def list_ordered(current):
-    """
-    <list_ordered> ::= "<ol>"<list_item>"</ol>"
-    """
-    list_item(current)
-
-def list_item(current):
-    """
-    (v2)<list_item> ::= "<li>"<formatted_text>"</li>" | <list_item>"<li>"<formatted_text>"</li>"
-    """
-    if re.search('<li.*>', current):
-        list_item(current)
-        formatted_text(current)
-
-def text(current):
-    """
-    <text> ::=  a | b | c | d | e | f | g | h | i | j | k | l | m 
-    | n | o | p | q | r | s | t | u | v | w | x | y | z 
-    | A | B | C | D | E | F | G | H | I | J | K | L | M 
-    | N | O | P | Q | R | S | T | U | V | W | X | Y | Z 
-    | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 
-    | ! | @ | # | $ | % | ^ | * | ( | ) | - | _ | = | + 
-    | ` | ~ | , | . | / | ? [ | ] | { | } | \\ | "|"
-    """
-    pattern = ['a' , "b" , "c" , "d" , "e" , "f" , "g" , "h" , "i" , "j" , "k" , "l" , "m"
-    , "n" , "o" , "p" , "q" , "r" , "s" , "t" , "u" , "v" , "w" , "x" , "y" , "z"
-    , "A" , "B" , "C" , "D" , "E" , "F" , "G" , "H" , "I" , "J" , "K" , "L" , "M"
-    , "N" , "O" , "P" , "Q" , "R" , "S" , "T" , "U" , "V" , "W" , "X" , "Y" , "Z"
-    , "0" , "1" , "2" , "3" , "4" , "5" , "6" , "7" , "8" , "9"
-    , "!" , "@" , "#" , "$" , "%" , "^" , "*" , "(" , ")" , "-" , "_" , "=" , "+"
-    , "`" , "~" , "," , "." , "/" , "?", "[" , "]" , "{" , "}" , "\\" , "|"]
-    # if character in re.compile(r'^[a-zA-Z0-9]+[^a-zA-Z0-9]$'):
-
-    if current in pattern:
-        print("In IF TRUE")
-        return True
-    else:
-        print("In IF FALSE")
-        return False
-
-def formatted_text(current):
-    """
-    <formatted_text> ::= <text><tag><formatted_text> | <text> | ∅
-    """
-
-    # if re.match(r'<h[1-6].*>', current):
-    if re.match(r'<[^/].*>', current):
-        # do something with header tags
-        print(F"OPENING TAG {current}")
-        tag(current)
-        formatted_text(current)
-    elif re.match(r'</.*>', current):
-        print(F"CLOSING TAG {current}")
-        return
-#    elif re.match(r'<.*?>', current):
-        # do something with other tags
-#        text(current)
-    else:
-        # handle regular text
-        print("Empty formatted_text()")
-        return
-
-
-
-    #if re.match(r'<h[1-6].*>', current):
-    #    print("Match!")
-    # if :
-    #if text(current) and re.search('<[^>]*>', current):
-    #    tag(current)
-    #    formatted_text(current)
-    #elif text(current):
-    #    text(current)
-    #else:
-    #    print("Empty formatted_text()")
-
-def tag(current):
-    """
-    <tag> ::= <void_tag> | <container_tag>
-    """
-
-    if re.search('<.*>', current) and not re.search('</.*>', current):
-        void_tag()
-    else:
-        container_tag(current)
-
-def void_tag():
-    """
-    <void_tag> ::= "<area>" | "<base>" | "<br>" | "<col>" | "<embed>" | "<hr>" 
-    | "<img>" | "<input>" | "<keygen>" | "<link>" | "<meta>" 
-    | "<param>" | "<source>" | "<track>" | "<wbr>"
-    """
-    void_tag_array = ["<area>", "<base>", "<br>", "<col>", "<embed>", "<hr>",
-    "<img>", "<input>", "<keygen>", "<link>", "<meta>",
-    "<param>", "<source>", "<track>", "<wbr>"]
-    return void_tag_array
-
-def container_tag(current):
-    """
-    (v2)<container_tag> ::= "<"<formatted_text_tag>">" <formatted_text> "</"\1">"
-    """
-
-    if re.search('<.*>', current) and not re.search('</.*>', current):
-        formatted_text_tag()
-        formatted_text(current)
-        # closing tag
-
-def formatted_text_tag():
-    """
-    # <formatted_text_tag> ::= "code" | "b" | "strong" | "i" | "em" | "blockquote"
-    """
-    tags = ["code", "b", "strong", "i", "em", "blockquote"]
-    return tags
+    no_whitespace = re.sub(r'^\s+', '', string)
+    # This regex removes any whitespace characters from the beginning of a string
+    no_opening_tags = re.sub(r'^<[^>]+>', '', no_whitespace)
+    # This regex looks for any HTML opening tags
+    no_closing_tags = re.sub(r'<\/[^>]+>$', '', no_opening_tags)
+    # This regex looks for any HTML closing tags
+    return no_closing_tags
 
 def open_file(file_input):
     """
     Function to open a file and save each line to a list
     """
-
     with open(file_input, 'r', encoding='UTF-8') as file_one:
         list_of_lines = file_one.readlines()
     file_one.close()
@@ -265,44 +219,42 @@ def open_file(file_input):
     i = 0
     for current in list_of_lines:
         print(F"Line {i}: {current}", end="")
-        # print(current, end=" ")
-
         if re.search('<body.*>', current):
             print("FOUND!")
             flag_start = i
-            # contain(current)
         if re.search('</body.*>', current):
             print("FOUND!")
             flag_end = i
-            # convert(file_input, file_output)
-            # break
         i += 1
     print("\n")
     print(flag_start)
     print(flag_end)
 
+    markdown_lines = []
     for index in range(flag_start+1,flag_end):
         print(F"Sending {list_of_lines[index]}")
-        contain(list_of_lines[index])
+        markdown_lines.append(content(list_of_lines[index], index, flag_end))
 
-def convert(file_input, file_output):
+    markdown_lines = [x for x in markdown_lines if x is not None]
+    print(F"markdown_lines : {markdown_lines}")
+    return markdown_lines
+
+def write(markdown_lines, file_output):
     """
     Function to read a file and write the contents to another file.
     """
-    with open(file_input, 'r', encoding='UTF-8') as file_one:
-        with open(file_output, 'w', encoding='UTF-8') as file_two:
-            for line in file_one:
-                file_two.write(line)
-        file_one.close()
+    with open(file_output, 'w', encoding='UTF-8') as file_two:
+        for line in markdown_lines:
+            file_two.write(line)
         file_two.close()
 
-def read_command_line_args(argv):
+def main(argv):
     """
-    Function to read arguments passed in from command line
+    Main Function, handles reading arguments passed in from command line
     """
     input_file = ''
     output_file = ''
-    opts, arg = getopt.getopt(argv, "hi:o:b", ["ifile=", "ofile="])
+    opts, arg = getopt.getopt(argv, "hi:o:", ["ifile=", "ofile="])
     for opt, arg in opts:
         if opt == '-h':
             print('<filename>.py -i <inputfile> -o <outputfile>')
@@ -311,32 +263,11 @@ def read_command_line_args(argv):
             input_file = arg
         elif opt in ("-o", "--ofile"):
             output_file = arg
-        elif opt in "-b":
-            extension = ".html"
-            if extension in output_file:
-                with open('index.html', 'r', encoding='UTF-8') as index:
-                    html = index.read()
-
-                path = os.path.abspath(output_file)
-                url = 'file://' + path
-
-                with open(path, 'w', encoding='UTF-8') as opened_file:
-                    opened_file.write(html)
-                    webbrowser.open(url)
-            else:
-                print("No html file found.")
         else:
             print('Correct usage is: <filename>.py -i <inputfile> -o <outputfile>')
     print('Input file is', input_file)
     print('Output file is', output_file)
-    # convert(input_file, output_file)
-    open_file(input_file)
-
-def main(argv):
-    """
-    Main Function
-    """
-    read_command_line_args(argv)
+    write(open_file(input_file), output_file)
 
 if __name__ == "__main__":
     main(sys.argv[1:])
