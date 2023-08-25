@@ -14,7 +14,7 @@ It's command line syntax is `python3 <filename>.py -i <inputfile> -o <outputfile
 
 **Away** is meant to be a `Markdown` to `HTML` converter equipped with the capability to convert `Markdown` files to `HTML` files and vice versa. It is intended to be a command line tool.
 
-It is named **Away** because `Markdown` and `HTML` are both mark_up_ languages and this tool is meant to be useful and enable its users to reach new _heights_ of convenience. Thus, the phrase, "Up, Up, and **Away**."
+It is named **Away** because `Markdown` and `HTML` are both mark*up* languages and this tool is meant to be useful and enable its users to reach new *heights* of convenience. Thus, the phrase, "Up, Up, and **Away**."
 
 ### Example of what is expected on using the system, if apply (inputs, output)
 
